@@ -127,8 +127,10 @@ renderer/
     sounds/               click.mp3, close.mp3, error.mp3
 build/                uygulama simgesi (.ico ve .png)
 installer/            Inno Setup betiği
+.github/workflows/    etiketten otomatik kurulum paketi derleyen iş akışı
 tools/
     smoke.js            renderer için çalışma zamanı testi
+    release-notes.js    CHANGELOG'dan sürüm notunu çıkarır
     mk_icon.py          simgeyi yeniden üretir
 ```
 
@@ -162,6 +164,7 @@ yapmanız gerekmez. Tamamen çıkış yapmak için klasörü kendiniz silin.
 | Klasik Açık | Gri paneller, köşeli görünüm; varsayılan tema |
 | Klasik Koyu | Aynı düzen, koyu renk paleti |
 | LAPD Mobil | İstemciye, MDC'ye ve ceza kanunu sekmesine PremierOne laciverti uygulanır |
+| LSSD Mobil          | İstemciye, MDC'ye ve ceza kanunu sekmesine koyu yeşil ve altın vurgular uygulanır |
 | Windows 7 Aero | Cam efektleri, yuvarlatılmış paneller, mavi odak parıltıları ve açık vurgular |
 | Windows 7 Aero LAPD | Windows 7 cam efektleri altında lacivert tema |
 | Windows 7 Aero Koyu | Gece kullanımı için grafit cam görünümü |
@@ -396,6 +399,18 @@ Otomatik denetimin ve Güncelle düğmesinin çalışması için kurulum dosyas�
 sayfasında bir GitHub Release varlığı olarak yayımlanması gerekir. Sürüm etiketi
 de sürüm numarasıyla eşleşmelidir (örneğin `v1.0.0`).
 
+## Yeni sürüm yayımlama
+
+Sürüm numarasını elle değiştirmenize gerek yoktur. GitHub'da **Releases > Draft a new
+release** ile `v1.2.3` biçiminde yeni bir etiket oluşturup yayımlayın. İş akışı
+(`.github/workflows/main.yml`) etiketten sürümü alır, `package.json` ve Inno Setup
+betiğine yazar, testleri çalıştırır, kurulum paketini derler ve exe dosyasını bu
+sürüme yükler. Sürüm notları `CHANGELOG.md` içinde aynı numaralı başlıktan alınır
+(örneğin `## 1.2.3`). Bu başlık yoksa kısa bir varsayılan metin kullanılır.
+
+Belirli bir etiket için yeniden derlemek isterseniz Actions sekmesinde "Build Windows
+installer" iş akışını elle çalıştırıp etiketi yazın.
+
 ## Uygulama notları
 
 Kaynak dosyalarda satır içi açıklama yoktur. Önceden kod içinde açıklanan
@@ -430,9 +445,12 @@ için yükseklik ayrıca belirtilir.
 **Discord durumu.** Zengin Durum (Rich Presence), üçüncü taraf bağımlılık olmadan
 doğrudan Discord'un yerel soketi üzerinden gönderilir. Varsayılan olarak kapalıdır ve
 Discord'un çalışmaması olağan durum olduğundan hatalar sessizce geçilir.
-Uygulama kimliği `main.js` içindeki Discord bölümünün başında bulunur. Simge,
-ilgili Discord uygulamasının Rich Presence görsel varlıklarına `app_icon` anahtarı
-altında yüklenmelidir.
+Discord'da görünen ilk satır (örneğin "Mobile Data Computer") koddan değil, Discord
+Developer Portal'daki uygulamanın adından gelir. Yeni bir uygulama oluşturup adını
+"Mobile Data Computer" yapın, **Application ID** değerini `main.js` içindeki
+`DISCORD_APP_ID` sabitine yazın ve uygulamanın Rich Presence > Art Assets bölümüne
+simgeyi `app_icon` adıyla yükleyin. İkinci satır yapılan işlemi, üçüncü satır karakter
+adını gösterir; ikisi de `renderer/renderer.js` içindeki `pushPresence` işlevinden gelir.
 
 **Amir özellikleri.** Amirlerin ve üst rütbeli memurların erişebildiği bazı
 görünümler yanlış çalışabilir; bu sayfaların kaynak koduna erişim yoktu. İstemci,

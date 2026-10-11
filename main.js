@@ -454,7 +454,7 @@ ipcMain.handle('app:openExternal', async (_e, url) => {
 
 ipcMain.handle('app:setTray', (_e, enabled) => setTrayEnabled(enabled))
 
-const DISCORD_APP_ID = '1532331199392120882'
+const DISCORD_APP_ID = '1558981904433156136'
 const DISCORD_LARGE_IMAGE = 'app_icon'
 let rpcSocket = null
 let rpcReady = false
@@ -510,8 +510,8 @@ function rpcPushActivity() {
     args: {
       pid: process.pid,
       activity: {
-        details: String(rpcWanted.details || 'On patrol').slice(0, 128),
-        state: String(rpcWanted.state || 'Mobile Data Computer').slice(0, 128),
+        details: String(rpcWanted.details || 'MDC kullanıyor').slice(0, 128),
+        state: String(rpcWanted.state || 'Mobil Veri Bilgisayarı').slice(0, 128),
         timestamps: { start: rpcWanted.since || Date.now() },
         assets: {
           large_image: DISCORD_LARGE_IMAGE,

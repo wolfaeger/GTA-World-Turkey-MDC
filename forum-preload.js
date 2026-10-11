@@ -51,6 +51,21 @@ const PALETTES = {
     scrollThumb: '#33569E',
     highlight: '#7A6400'
   },
+  lssd: {
+    panel: '#1C4B31',
+    panelAlt: '#256240',
+    header: '#307C52',
+    border: '#64B88A',
+    field: '#133924',
+    fieldBorder: '#7ECCA1',
+    text: '#FFFFFF',
+    textMuted: '#AFDFC4',
+    link: '#F0D675',
+    zebra: '#215639',
+    scrollTrack: '#174029',
+    scrollThumb: '#42805E',
+    highlight: '#7A6400'
+  },
   aero: {
     panel: '#F1F6FB',
     panelAlt: '#E6F0FA',

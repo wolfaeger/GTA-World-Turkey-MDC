@@ -207,12 +207,13 @@ const PENAL_URL = 'https://forum-tr.gta.world/index.php?/topic/77-san-andreas-ce
 const APP_NAME = 'Mobile Data Computer - GTA World TR'
 const REPO_URL = 'https://github.com/wolfaeger/GTA-World-Turkey-MDC'
 
-const SKIN_CLASSES = ['dark', 'lapd', 'aero', 'aerolapd', 'aerodark', 'off']
+const SKIN_CLASSES = ['dark', 'lapd', 'lssd', 'aero', 'aerolapd', 'aerodark', 'off']
 
 const THEMES = {
   light: 'Klasik Açık',
   dark: 'Klasik Koyu',
   lapd: 'LAPD Mobil',
+  lssd: 'LSSD Mobil',
   aero: 'Windows 7 Aero',
   aerolapd: 'Windows 7 Aero LAPD',
   aerodark: 'Windows 7 Aero Koyu',
@@ -355,6 +356,7 @@ const THEME_ITEMS = [
   { id: 'mi-theme-light', theme: 'light', label: 'Klasik Açık Tema', accel: 'F8' },
   { id: 'mi-theme-dark', theme: 'dark', label: 'Klasik Koyu Tema', accel: '' },
   { id: 'mi-theme-lapd', theme: 'lapd', label: 'LAPD Mobil Tema', accel: '' },
+  { id: 'mi-theme-lssd', theme: 'lssd', label: 'LSSD Mobil Tema', accel: '' },
   { id: 'mi-theme-aero', theme: 'aero', label: 'Windows 7 Aero Teması', accel: '' },
   { id: 'mi-theme-aerolapd', theme: 'aerolapd', label: 'Windows 7 Aero LAPD Teması', accel: '' },
   { id: 'mi-theme-aerodark', theme: 'aerodark', label: 'Windows 7 Aero Koyu Tema', accel: '' },
@@ -382,24 +384,42 @@ function renderChecks() {
   })
 }
 
+let officerName = ''
+let lastPresenceKey = ''
+
+const PRESENCE_BY_KIND = {
+  'Kayıt': 'Sorgulama yapıyor',
+  'Araç': 'Sorgulama yapıyor',
+  'Sorgu': 'Sorgulama yapıyor',
+  'Motorlu Taşıtlar Dairesi': 'Sorgulama yapıyor',
+  'Harita': 'Haritaya bakıyor',
+  'Arama emri': 'Arama emirlerine bakıyor',
+  'Arama emirleri listesi': 'Arama emirlerine bakıyor',
+  'Olay': 'Olaylara bakıyor',
+  'Olay listesi': 'Olaylara bakıyor',
+  'APB': 'APB’lere bakıyor',
+  'APB listesi': 'APB’lere bakıyor'
+}
+
+function presenceDetails() {
+  if (activeTab === 'penal') return 'Ceza kanununa bakıyor'
+  const page = findPage(activePageId)
+  const kind = page ? histKind(page.url) : ''
+  return PRESENCE_BY_KIND[kind] || 'MDC kullanıyor'
+}
+
 function pushPresence() {
   if (!window.mdt || typeof window.mdt.setPresence !== 'function') return
-  let where = 'Mobil Veri Bilgisayarı'
-  try {
-    if (activeTab === 'penal') {
-      where = 'Ceza kanununu okuyor'
-    } else {
-      const page = findPage(activePageId)
-      if (page) where = pageLabel(page) || where
-    }
-  } catch (_) {
+  const payload = {
+    enabled: !!view.discordPresence,
+    details: presenceDetails(),
+    state: officerName || 'Mobil Veri Bilgisayarı'
   }
+  const key = JSON.stringify(payload)
+  if (key === lastPresenceKey) return
+  lastPresenceKey = key
   try {
-    window.mdt.setPresence({
-      enabled: !!view.discordPresence,
-      details: 'MDC kullanıyor',
-      state: where
-    })
+    window.mdt.setPresence(payload)
   } catch (_) {
   }
 }
@@ -464,7 +484,7 @@ function setTheme(next) {
 }
 
 function cycleTheme() {
-  const order = ['light', 'dark', 'lapd', 'aero', 'aerolapd', 'aerodark', 'off']
+  const order = ['light', 'dark', 'lapd', 'lssd', 'aero', 'aerolapd', 'aerodark', 'off']
   setTheme(order[(order.indexOf(view.theme) + 1) % order.length])
 }
 
@@ -1343,11 +1363,12 @@ function showOptions() {
 
   openDialog('Ayarlar',
     '<fieldset class="opt-group"><legend>Görünüm</legend>' +
-    radio('light') + radio('dark') + radio('lapd') + radio('aero') +
+    radio('light') + radio('dark') + radio('lapd') + radio('lssd') + radio('aero') +
     radio('aerolapd') + radio('aerodark') + radio('off') +
     '<p class="opt-note">F8 temalar arasında geçiş yapar. Üç Windows 7 Aero teması istemciye, ' +
     'MDC’ye ve açılır pencerelere Windows 7 döneminin cam efektlerini ve mavi vurgularını uygular. ' +
-    'LAPD Mobil, MDC’yi, ceza kanunu sekmesini ve istemci arayüzünü devriye renklerine dönüştürür.</p>' +
+    'LAPD Mobil, MDC’yi, ceza kanunu sekmesini ve istemci arayüzünü devriye renklerine dönüştürür; ' +
+    'LSSD Mobil aynısını koyu yeşil ve altın tonlarıyla yapar.</p>' +
     '</fieldset>' +
     '<fieldset class="opt-group"><legend>Hızlı Kısayollar</legend>' +
     check('quickLinks', 'Hızlı kısayol çubuğu (sekmelerin altındaki simgeler)') +
@@ -1846,6 +1867,7 @@ const actions = {
   themelight: () => setTheme('light'),
   themedark: () => setTheme('dark'),
   themelapd: () => setTheme('lapd'),
+  themelssd: () => setTheme('lssd'),
   themeaero: () => setTheme('aero'),
   themeaerolapd: () => setTheme('aerolapd'),
   themeaerodark: () => setTheme('aerodark'),
@@ -2071,6 +2093,7 @@ function wirePage(wv, page) {
     if (!isActive()) return
     if (address) address.value = e.url
     updateNav()
+    pushPresence()
   })
 
   on(wv, 'did-navigate-in-page', (e) => {
@@ -2078,6 +2101,7 @@ function wirePage(wv, page) {
     if (!isActive()) return
     if (address) address.value = e.url
     updateNav()
+    pushPresence()
   })
 
   on(wv, 'page-title-updated', (e) => {
@@ -2098,6 +2122,13 @@ function wirePage(wv, page) {
         sbTheme.textContent = info.skinnable === false
           ? 'Tema: uygulanmadı (oturum açma)'
           : 'Tema: ' + THEMES[view.theme]
+      }
+      if (info.officer) {
+        const name = String(info.officer).replace(/\s*#\d+\s*$/, '').trim()
+        if (name && name !== officerName) {
+          officerName = name
+          pushPresence()
+        }
       }
       if (info.subject && page) histLabel(page.url, info.subject)
       if (info.subject) setStatus('Kayıt: ' + info.subject)
@@ -2260,6 +2291,7 @@ boot('init', () => {
   sendKeys()
   setInterval(sendKeys, 4000)
   if (view.updateCheck) setTimeout(() => runUpdateCheck(true), 4000)
+  document.addEventListener('mdc:chrome-changed', pushPresence)
   applyView()
   if (window.mdt && window.mdt.onWake) window.mdt.onWake(wakeViews)
   let played = false

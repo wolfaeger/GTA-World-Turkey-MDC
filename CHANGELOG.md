@@ -4,6 +4,9 @@
 
 GTA World TR için ilk herkese açık sürüm. Önceki geliştirme sürümlerindeki özellikler ve düzeltmeler bu sürümde bir araya getirilmiştir.
 
+### Discord
+- Discord durumu yeniden düzenlendi. Uygulama adının altında yapılan işlem ("Sorgulama yapıyor", "Haritaya bakıyor", "Ceza kanununa bakıyor" gibi) ve bir alt satırda oturum açan karakterin adı gösterilir.
+
 ### Arayüz
 - Hakkında penceresindeki düğmeler düzeltildi: "Şimdi Güncelle" ve "Sürüm Sayfasını Aç" metinleri artık düğme sınırlarının dışına taşmıyor; güncelleme paneli dar pencerelerde düzgün satırlara bölünüyor.
 
@@ -17,6 +20,8 @@ GTA World TR için ilk herkese açık sürüm. Önceki geliştirme sürümlerind
 - Font Awesome'a erişilemezse çubuk boş kalmasın diye istemci otomatik olarak yerleşik simge karakterlerine geçiyor.
 
 ### Temalar
+- Yeni **LSSD Mobil** teması eklendi. LAPD Mobil ile aynı yerleşimi kullanır; istemci arayüzü, MDC ve ceza kanunu sekmesi koyu yeşil zemin ve altın vurgularla gösterilir. Görünüm menüsünden, Araçlar > Ayarlar bölümünden ya da F8 ile temalar arasında geçerek seçilebilir.
+- Başarı, uyarı ve tehlike renkleri LSSD temasında da korunur; bağlantılar ve seçili öğe kenarlıkları altın rengindedir.
 - Windows 7 temaları artık orta noktada belirgin parlaklık geçişi olan, iki tonlu özgün Aero parlaklığını kullanıyor. Paneller, başlıklar, düğmeler ve pencere başlık çubukları gerçek Aero cam görünümüne daha yakın.
 
 Görseller
