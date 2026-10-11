@@ -1,408 +1,439 @@
-# PatrolOne Mobile Client
+# Mobile Data Computer - GTA World TR
 
-A plain desktop shell around the real GTA World Web MDC
-(<https://mdc.gta.world/>). The site itself loads in an embedded browser view;
-the surrounding menu bar, toolbar and status bar are ordinary HTML. The look is
-deliberately unfashionable: system fonts, grey panels, square corners, the sort
-of thing that has been running unchanged in a dispatch office since 2008.
+GTA World Web MDC için sade bir masaüstü kabuğu
+(<https://mdc-tr.gta.world/>). Site, uygulamanın içine gömülü bir tarayıcıda
+açılır; menü çubuğu, araç çubuğu ve durum çubuğu ise standart HTML öğeleridir.
+Görünüm bilerek gösterişsiz tutuldu: sistem yazı tipleri, gri paneller ve köşeli
+çizgiler. 2008'den beri bir sevk merkezinde çalışıyormuş gibi.
 
-The code carries no comments by design. Everything worth explaining lives here,
-including the list of mistakes at the bottom that must not be repeated. Release
-history is in `CHANGELOG.md`.
+Kodda bilerek açıklama satırı kullanılmıyor. Açıklanması gereken her şey,
+tekrarlanmaması gereken hatalar listesi de dahil, bu dosyada yer alıyor. Sürüm
+geçmişi için `CHANGELOG.md` dosyasına bakın.
 
-### How this was built, and what that means for you
+### Nasıl geliştirildi, sizin için ne anlama geliyor?
 
-This client does not talk to an API. It loads the real site and restyles it from
-the outside, and every rule it applies was written against the actual page
-source of the MDC: the markup of each dialog, table, form and toolbar was read
-and matched selector by selector. Nothing here is guessed from a screenshot if
-the source was available.
+Bu istemci bir API kullanmaz. Gerçek siteyi yükler ve görünümünü dışarıdan
+değiştirir. Uygulanan her kural, MDC'nin gerçek sayfa kaynak kodu incelenerek
+yazılmıştır: iletişim pencerelerinin, tabloların, formların ve araç çubuklarının
+işaretlemesi okunup seçiciler tek tek eşleştirilmiştir. Kaynak koduna erişim
+varken hiçbir şey ekran görüntüsünden tahmin edilmemiştir.
 
-That also sets the limits of the app. **Supervisors and high-ranking officers
-should expect some features to be rough or plainly broken.** Those ranks see
-views, panels and dialogs that are not visible to the account this was built
-with, so their page source could not be obtained and none of it could be tested
-or styled. Anything behind a supervisory permission is unstyled at best and
-misaligned at worst. If you have access to those pages, send the page source of
-the screen that looks wrong and it can be fixed the same way as everything else.
+Bu yaklaşım uygulamanın sınırlarını da belirler. **Amirler ve üst rütbeli
+memurlar bazı özelliklerin eksik çalışabileceğini veya hiç çalışmayabileceğini
+hesaba katmalıdır.** Bu rütbeler, geliştirme sırasında kullanılan hesapta
+görünmeyen sayfalar, paneller ve pencereler görür. Bu nedenle ilgili sayfaların
+kaynak kodu alınamamış, davranışları test edilememiş ve stilleri
+düzenlenememiştir. Amir izinlerinin arkasındaki bölümler en iyi ihtimalle
+stilsiz, en kötü ihtimalle hizası bozuk olabilir. Bu sayfalara erişiminiz varsa,
+yanlış görünen ekranın sayfa kaynağını paylaşın; diğer bölümler gibi onu da
+düzeltebiliriz.
 
-### Pages
+### Sayfalar
 
-Several MDC pages can be open at once. The strip under the tabs is captioned
-`PAGES` and lists them, `+` opens another, the cross closes one, Ctrl+T and
-Ctrl+W do the same from the keyboard, and anything the site opens in a new
-window arrives as a new page. Each page is a separate view, so a record keeps
-its scroll position and any half-filled form while you work in another one.
+Aynı anda birden fazla MDC sayfası açabilirsiniz. Sekmelerin altındaki `SAYFALAR`
+şeridi açık sayfaları listeler. `+` yeni sayfa açar, çarpı sayfayı kapatır;
+Ctrl+T ve Ctrl+W aynı işlemleri klavyeden yapar. Sitenin yeni pencerede açtığı
+öğeler de yeni sayfa olarak eklenir. Her sayfa ayrı bir görünüm olduğundan,
+başka bir sayfada çalışırken kayıtların kaydırma konumu ve yarım bırakılmış
+formları korunur.
 
-Right-click opens things as a new page: a navigation chip such as Emergency Map,
-a quick shortcut, or any link on the page itself, such as a person's record or a
-warrant. Left-click still navigates the page you are on.
+Bir öğeye sağ tıklayarak onu yeni sayfada açabilirsiniz: Acil Durum Haritası gibi
+bir gezinme düğmesi, hızlı kısayol veya kişinin kaydı ya da arama emri gibi bir
+sayfa bağlantısı. Sol tıklama geçerli sayfada gezinmeye devam eder.
 
-Each entry is named after what it holds — its navigation entry, or the record
-number — rather than the site's own page title, which is "Mobile Data Computer"
-on nearly every screen.
+Sayfa sekmelerinde sitenin hemen her ekranda kullandığı "Mobil Veri Bilgisayarı"
+başlığı yerine sayfanın gezinme adı veya kayıt numarası gösterilir.
 
-### History
+### Geçmiş
 
-Tools > History, or Ctrl+H. Every page and record opened in the client is
-logged with the time it was opened and what it was: a record and the subject's
-name, a plate check, a warrant, an incident, a map. The list has its own search
-box, which matches on name, plate, record number, address, page name and date,
-so "which records did I run, and when" is answerable after the fact.
+Araçlar > Geçmiş bölümünü veya Ctrl+H kısayolunu kullanın. İstemcide açılan her
+sayfa ve kayıt, açılma saati ve türüyle birlikte kaydedilir: kişi adı, plaka
+sorgusu, arama emri, olay veya harita. Geçmiş listesinin araması isim, plaka,
+kayıt numarası, adres, sayfa adı ve tarihe göre eşleşme bulur; böylece hangi
+kayıtları ne zaman sorguladığınızı sonradan görebilirsiniz.
 
-Left-click an entry to open it in the page in front, right-click to open it as a
-new page. The log is held on this computer only, in the client's own storage,
-and is never sent anywhere. Clear Session does not touch it; use Clear History
-in that window, or turn logging off entirely under Tools > Options.
+Bir kayda sol tıklayarak öndeki sayfada, sağ tıklayarak yeni bir sayfada
+açabilirsiniz. Geçmiş yalnızca bu bilgisayarda, istemcinin kendi depolama alanında
+tutulur ve hiçbir yere gönderilmez. Oturumu Temizle işlemi geçmişi silmez; geçmiş
+penceresindeki Geçmişi Temizle düğmesini kullanın veya kaydı tamamen kapatmak
+için Araçlar > Ayarlar bölümüne gidin.
 
-**Only log subjects and vehicles** sits under the History switch. With it on,
-only records, name checks, plate checks, vehicles and warrants are kept;
-dashboards, lists, maps and the penal code are skipped. It is greyed out while
-history logging is off, since there would be nothing to narrow down.
+Geçmiş anahtarının altındaki **Yalnızca kişi ve araç sorgularını kaydet**
+seçeneği açıldığında yalnızca kayıtlar, isim ve plaka sorguları, araçlar ve
+arama emirleri tutulur; ana sayfalar, listeler, haritalar ve ceza kanunu
+atlanır. Geçmiş kapalıyken bu seçenek devre dışıdır.
 
-### Sounds
+### Sesler
 
-Off by default, under Tools > Options. Nine tones: click, navigation, opening a
-page, closing a dialog or going back, a confirmation on copy, a notification
-tone, a warning tone for restricted actions, an error tone for failures and MDC
-error messages, and a start-up tone.
+Sesler Araçlar > Ayarlar bölümünde bulunur ve varsayılan olarak kapalıdır. Dokuz
+ses vardır: tıklama, gezinme, sayfa açma, pencere kapatma veya geri gitme,
+kopyalama onayı, bildirim, kısıtlı işlem uyarısı, işlem ya da MDC hata mesajı ve
+başlangıç sesi.
 
 ---
 
-## 1. Running from source
+## 1. Kaynak koddan çalıştırma
 
-Node.js 18 or newer on Windows.
+Windows'ta Node.js 18 veya üzeri gerekir.
 
 ```
 npm install
 npm start
 ```
 
-The first launch shows the GTA World UCP sign-in page. Log in there exactly as
-you would in a browser. Cookies persist, so you stay logged in across restarts.
+İlk açılışta GTA World UCP oturum açma sayfası gösterilir. Tarayıcıda yaptığınız
+gibi giriş yapın. Çerezler saklandığından, uygulamayı yeniden açtığınızda oturum
+açık kalır.
 
-### Scripts
+### Betikler
 
-| Command | What it does |
+| Komut | Açıklama |
 | --- | --- |
-| `npm start` | Run the app from source |
-| `npm run smoke` | Syntax-check every script, then run the renderer against a fake DOM |
-| `npm run pack` | Build the application folder into `dist/win-unpacked` |
-| `npm run dist` | Build an electron-builder NSIS installer |
-| `npm run icon` | Regenerate `build/icon.ico` and `build/icon.png` (needs Python + Pillow) |
+| `npm start` | Uygulamayı kaynak koddan çalıştırır |
+| `npm run smoke` | Betiklerin sözdizimini denetler ve renderer'ı sahte DOM üzerinde çalıştırır |
+| `npm run pack` | Uygulama klasörünü `dist/win-unpacked` içine paketler |
+| `npm run dist` | electron-builder ile NSIS kurulum paketi oluşturur |
+| `npm run icon` | `build/icon.png` dosyasından `build/icon.ico` üretir (Python + Pillow gerekir) |
 
-Run `npm run smoke` after any renderer change. It parses the real
-`renderer/index.html`, executes `renderer/renderer.js` against a hand-built DOM
-stub, and fails on a syntax error, an unresolvable element id, an unwired menu
-label or item, or a menu that will not open and close. A renderer that throws on
-load silently kills the entire menu bar, which is exactly how it shipped once.
+Renderer'da her değişiklikten sonra `npm run smoke` çalıştırın. Test gerçek
+`renderer/index.html` dosyasını ayrıştırır ve `renderer/renderer.js` dosyasını
+elle hazırlanmış bir DOM taslağı üzerinde çalıştırır. Sözdizimi hatasında,
+bulunamayan bir öğe kimliğinde, olay bağlantısı yapılmamış menü başlığı ya da
+öğesinde veya açılıp kapanmayan bir menüde başarısız olur. Yüklenirken hata veren
+renderer tüm menü çubuğunu sessizce devre dışı bırakabilir; daha önce yaşanan
+bir sürümde sorun tam olarak buydu.
 
-## 2. Packaging
+## 2. Paketleme
 
-`npm run pack` writes `dist/win-unpacked/`, containing `PatrolOne Mobile Client.exe` plus the
-Electron runtime and a `resources/` folder. That folder is the input for an
-installer; `installer/mdc-client.iss` is a ready Inno Setup script that packages
-it. Keep `AppVersion` in the script in step with `version` in `package.json`.
+`npm run pack`, `Mobile Data Computer - GTA World TR.exe` dosyasını, Electron
+çalışma zamanını ve `resources/` klasörünü içeren `dist/win-unpacked/` dizinini
+oluşturur. Bu klasör kurulum paketi için girdi olarak kullanılır;
+`installer/mdc-client.iss` dizini paketlemeye hazır bir Inno Setup betiğidir.
+Betiğin `AppVersion` değerini `package.json` içindeki `version` değeriyle aynı
+tutun.
 
 ---
 
-## 3. Layout
+## 3. Dizin yapısı
 
 ```
-main.js               window, persistent session, tray, IPC
-preload.js            small bridge for the shell window
-webview-preload.js    runs inside the MDC page: skin, fixes, side panel toggle
+main.js               pencere, kalıcı oturum, sistem tepsisi, IPC
+preload.js            uygulama penceresi için küçük köprü
+webview-preload.js    MDC sayfasında tema, düzeltmeler ve yan panel anahtarı
 renderer/
-  index.html          menu bar, toolbar, find bar, status bar, dialog
-  style.css           the shell chrome only
-  renderer.js         all shell behaviour
-  sounds/             click.mp3, close.mp3, error.mp3
-build/                application icon (.ico and .png)
-installer/            Inno Setup script
+    index.html            menü, araç çubuğu, arama çubuğu, durum çubuğu, pencere
+    style.css             yalnızca uygulama arayüzünün stilleri
+    renderer.js           uygulama arayüzünün tüm davranışları
+    sounds/               click.mp3, close.mp3, error.mp3
+build/                uygulama simgesi (.ico ve .png)
+installer/            Inno Setup betiği
 tools/
-  smoke.js            runtime test for the renderer
-  mk_icon.py          regenerates the icon
+    smoke.js            renderer için çalışma zamanı testi
+    mk_icon.py          simgeyi yeniden üretir
 ```
 
 ---
 
-## 4. Sign-in and privacy
+## 4. Oturum açma ve gizlilik
 
-The application never asks for, stores, or transmits your UCP password. You log
-in through the embedded page itself. Cookies live in the persistent session
-partition `persist:gtaw-mdc`, under a **fixed** folder,
+Uygulama UCP parolanızı hiçbir zaman istemez, saklamaz veya iletmez. Girişi
+uygulamanın içindeki sayfadan yaparsınız. Çerezler, **sabit** bir klasör altında
+bulunan kalıcı `persist:gtaw-mdc` oturum bölümünde tutulur:
 `%APPDATA%\gtaw-mdc-client`.
 
-That folder is pinned in `main.js` and must stay pinned. Electron derives its
-data folder from the application name by default, so renaming the product once
-silently pointed the session at an empty folder, discarded the saved login, and
-produced a page that looked broken but was simply logged out. An older folder
-from a previous name is copied across once if found.
+Bu klasör `main.js` içinde sabitlenmiştir ve öyle kalmalıdır. Electron normalde
+veri klasörünü uygulama adından türetir. Ürün adı bir kez değiştirildiğinde
+oturum başka, boş bir klasöre yönelmiş; kayıtlı giriş kaybolmuş ve oturum
+kapanmış olmasına rağmen sayfa bozukmuş gibi görünmüştü. Önceki adlardan kalma
+bir klasör bulunursa içeriği yeni konuma bir kez kopyalanır.
 
-File > Sign Out clears the session on request. Uninstalling leaves the folder
-alone, so reinstalling does not force a fresh login; delete it by hand to sign
-out completely.
+Dosya > Oturumu Temizle komutu isteğiniz üzerine oturumu siler. Uygulamayı
+kaldırmak bu klasöre dokunmaz; bu nedenle yeniden kurulumda tekrar giriş
+yapmanız gerekmez. Tamamen çıkış yapmak için klasörü kendiniz silin.
 
 ---
 
-## 5. Features
+## 5. Özellikler
 
-### Skins
+### Temalar
 
-| Skin | Notes |
+| Tema | Açıklama |
 | --- | --- |
-| Classic Light | Grey panels, square corners, the default |
-| Classic Dark | Same geometry, dark palette |
-| LAPD Mobile | PremierOne navy livery across the client, the MDC and the penal code tab |
-| Windows 7 Aero | Glass gradients, rounded panels, blue focus glows and light highlights, Windows 7 era |
-| Windows 7 Aero LAPD | The navy livery under Windows 7 glass |
-| Windows 7 Aero Dark | Graphite glass for night shifts |
-| Original MDC | No styling at all; the site as it ships |
+| Klasik Açık | Gri paneller, köşeli görünüm; varsayılan tema |
+| Klasik Koyu | Aynı düzen, koyu renk paleti |
+| LAPD Mobil | İstemciye, MDC'ye ve ceza kanunu sekmesine PremierOne laciverti uygulanır |
+| Windows 7 Aero | Cam efektleri, yuvarlatılmış paneller, mavi odak parıltıları ve açık vurgular |
+| Windows 7 Aero LAPD | Windows 7 cam efektleri altında lacivert tema |
+| Windows 7 Aero Koyu | Gece kullanımı için grafit cam görünümü |
+| Özgün MDC | Ek stil uygulanmaz; site özgün görünümüyle açılır |
 
-Switch from View, from Tools > Options, or press F8 to cycle. **Sign-in pages are
-never skinned** - the skin only applies on `mdc.gta.world`, so the UCP login and
-the Google sign-in screen render completely stock.
+Temayı Görünüm veya Araçlar > Ayarlar menüsünden değiştirebilir ya da F8 ile
+temalar arasında geçiş yapabilirsiniz. **Oturum açma sayfalarına tema uygulanmaz.**
+Tema yalnızca `mdc-tr.gta.world` üzerinde etkinleşir; UCP ve Google giriş
+ekranları özgün görünümleriyle gösterilir.
 
-Skin details worth knowing:
+Tema davranışıyla ilgili notlar:
 
-- The WANTED bar is painted a flat red bar across the full width of its panel,
-  with a short fixed line height so it never grows into a tall block.
-- The Criminal Points strip and the Age field have their fill and border removed
-  so they read as plain text.
-- Text wrapped in double asterisks, the `/me` emote convention, renders in
-  italic purple wherever it appears in a record.
-- Sidebar rows change neither text colour nor background on hover.
-- Only the text inside double asterisks is coloured; the asterisks themselves are
-  hidden, and the original characters are restored with the Original MDC skin.
+- ARANIYOR (WANTED) çubuğu panelinin tamamı boyunca düz kırmızı gösterilir; sabit ve kısa satır yüksekliği, çubuğun gereğinden fazla uzamasını önler.
+- Ceza Puanı (Criminal Points) şeridinin ve Yaş (Age) alanının arka planı ile kenarlığı kaldırılır; böylece düz metin gibi görünürler.
+- Kayıtlarda çift yıldız (`**`) içine alınan metinler, `/me` rol yapma yazımı doğrultusunda italik mor gösterilir.
+- Üzerine gelindiğinde yan panel satırlarının metin veya arka plan rengi değişmez.
+- Çift yıldızların yalnızca içindeki metin renklendirilir; yıldızlar gizlenir. Özgün MDC teması seçildiğinde karakterler geri yüklenir.
 
-### Side panel
+### Yan panel
 
-The MDC's own left navigation panel can be hidden to gain width: the **Side
-Panel** button on the toolbar, View > MDC Side Panel, F10, or Tools > Options.
-The choice persists, survives navigation, and works with the skin off.
+Görünüm alanını genişletmek için MDC'nin sol gezinme panelini gizleyebilirsiniz:
+araç çubuğundaki **Yan Panel** düğmesini, Görünüm > MDC Yan Paneli seçeneğini,
+F10'u veya Araçlar > Ayarlar'ı kullanın. Tercih kaydedilir, sayfa geçişlerinde
+korunur ve temalar kapalıyken de çalışır.
 
-### MDC search boxes
+### MDC arama kutuları
 
-The site's own Search Person and Search Vehicle fields can be hidden from
-Tools > Options > Layout. The shell's own name and plate lookups keep working
-while they are hidden, because they drive those same fields.
+Sitenin Kişi Sorgula ve Araç Sorgula alanlarını Araçlar > Ayarlar > Yerleşim
+bölümünden gizleyebilirsiniz. Uygulamanın isim ve plaka sorguları aynı alanları
+kullandığı için bu durumda da çalışmaya devam eder.
 
-### Sounds
+### Sesler
 
-Off by default; enable in Tools > Options > Sounds. Three short samples live in
-`renderer/sounds`: `click.mp3` for clicks and navigation, `close.mp3` for
-closing a dialog, dismissing a notification or going back, and `error.mp3` for
-failed actions, failed page loads and error messages from the site. Replace the
-files to change the sounds; the names are fixed.
+Varsayılan olarak kapalıdır; Araçlar > Ayarlar > Sesler bölümünden açabilirsiniz.
+`renderer/sounds` klasöründeki üç kısa ses dosyası şunlardır: tıklama ve gezinme
+için `click.mp3`, pencere kapatma, bildirimi kapatma veya geri gitme için
+`close.mp3`, başarısız işlemler, yüklenemeyen sayfalar ve site hata mesajları
+için `error.mp3`. Sesleri değiştirmek için dosyaları yenileriyle değiştirin;
+dosya adları sabittir.
 
-### Penal Code tab
+### Ceza Kanunu sekmesi
 
-The window has two tabs above the page area: Mobile Data Computer and Penal Code
-(Ctrl+1 and Ctrl+2, also under View). The Penal Code tab loads the San Andreas
-Penal Code topic from the GTA World forums and strips it down to the code text
-itself: no forum header, navigation, breadcrumbs, footer, author panels, post
-controls, reactions, pagers or profile links. Headings, tables and quotes are
-redrawn in the same skin as the rest of the app, and the dark skin applies here
-too.
+Sayfa alanının üzerinde Mobil Veri Bilgisayarı ve Ceza Kanunu olmak üzere iki
+sekme bulunur (Ctrl+1 ve Ctrl+2; ayrıca Görünüm menüsünde). Ceza Kanunu sekmesi,
+GTA World forumlarındaki San Andreas Ceza Kanunu konusunu yükler ve yalnızca
+kanun metnini bırakır. Forum başlığı, gezinme alanları, içerik yolu, alt bilgi,
+yazar panelleri, gönderi kontrolleri, tepkiler, sayfalama ve profil bağlantıları
+gösterilmez. Başlıklar, tablolar ve alıntılar uygulamanın geri kalanıyla aynı
+temayla yeniden biçimlendirilir; koyu tema burada da geçerlidir.
 
-The forums need their own sign-in, which happens in the tab exactly as it would
-in a browser; no forum credentials are stored. Until you are signed in the forum
-page renders stock, unskinned, so the login form behaves normally. Sign Out of
-Forums in the Penal Code bar clears only forum cookies and leaves the MDC session
-signed in.
+Forumda ayrıca oturum açmanız gerekir; bunu sekmede, tarayıcıda yaptığınız gibi
+yapabilirsiniz. Forum giriş bilgileri saklanmaz. Giriş yapana kadar forum sayfası
+özgün stiliyle gösterilir, böylece giriş formu normal çalışır. Ceza Kanunu
+çubuğundaki Forum Oturumunu Kapat düğmesi yalnızca forum çerezlerini siler;
+MDC oturumu açık kalır.
 
-The Search penal code box filters as you type: sections that do not contain the
-text are hidden and the remaining matches are highlighted, with a count in the
-status bar. Clear restores every section.
+Ceza kanunu arama kutusu yazdıkça maddeleri filtreler. Aranan metni içermeyen
+maddeler gizlenir, eşleşmeler vurgulanır ve sonuç sayısı durum çubuğunda
+gösterilir. Temizle düğmesi tüm maddeleri yeniden gösterir.
 
-### Notification area (tray)
+### Bildirim alanı (sistem tepsisi)
 
-Off by default; enable in Tools > Options > Window. When on, minimizing or
-closing leaves the application running with a tray icon. Click the icon to
-restore, or use its Exit command to quit. When off, the window behaves normally.
+Varsayılan olarak kapalıdır; Araçlar > Ayarlar > Pencere bölümünden açabilirsiniz.
+Açıkken pencereyi küçültmek veya kapatmak uygulamayı sistem tepsisinde çalışır
+durumda bırakır. Geri açmak için simgeye tıklayın; çıkmak için simgenin menüsündeki
+Çıkış komutunu kullanın. Kapalıyken pencere normal şekilde davranır.
 
-### Keyboard
+### Klavye
 
-| Key | Action |
+| Tuş | İşlev |
 | --- | --- |
-| F5 | Reload |
-| F3 | Find next |
-| F8 | Cycle skin |
-| F9 | Address bar |
-| F10 | Show/hide the MDC side panel |
-| Ctrl+F | Find on page |
-| Ctrl+N / Ctrl+L | Name check / plate check |
-| Ctrl+P | Print |
-| Ctrl +, Ctrl -, Ctrl+0 | Zoom in, out, reset |
-| Alt+Left / Alt+Right | Back / forward |
-| Esc | Close menu, find bar or dialog; otherwise stop loading |
+| F5 | Yenile |
+| F3 | Sonrakini bul |
+| F8 | Temalar arasında geçiş yap |
+| F9 | Adres çubuğu |
+| F10 | MDC yan panelini göster/gizle |
+| Ctrl+F | Sayfada bul |
+| Ctrl+N / Ctrl+L | İsim sorgusu / plaka sorgusu |
+| Ctrl+P | Yazdır |
+| Ctrl +, Ctrl -, Ctrl+0 | Yakınlaştır, uzaklaştır, sıfırla |
+| Alt+Sol / Alt+Sağ | Geri / ileri |
+| Esc | Menüyü, arama çubuğunu veya iletişim penceresini kapatır; aksi durumda yüklemeyi durdurur |
 
-### Diagnostics
+### Tanılama
 
-Tools > Layout Report prints the window size, the embedded view size, the page
-viewport and document size, the ratio between them, and any element taller than
-the viewport. Fastest way to tell a shell sizing problem from a page problem.
-
----
-
-## 6. Rules learned the hard way
-
-Each of these caused a visible bug. They are recorded here because the code no
-longer carries comments.
-
-1. **Never put `inherit` in a `font-family` list.** It is invalid and voids the
-   whole declaration, which turned every icon into an empty square.
-2. **Never apply a blanket `transition: none` or `animation: none`.** Bootstrap
-   drives expand/collapse from transition events; removing them leaves panels
-   stuck open.
-3. **`transition: revert` is not an escape hatch.** It reverts to the browser
-   default and discards the author transition. Always give an explicit duration.
-4. **Never freeze a property Bootstrap animates.** With no value change there is
-   no `transitionend`, the internal transitioning flag stays set, and every
-   later show call returns early.
-5. **Never give `.modal` a background.** It is the full-viewport container; the
-   visible panel is `.modal-content`. Painting the container greys out the whole
-   window and swallows clicks, which is why file uploads appeared to do nothing.
-6. **Leave `input[type="file"]` and cropper widgets unstyled** (`all: revert`).
-7. **The sidebar's active row must not be white on blue,** sidebar icons must
-   never inherit the panel colour, and hover must change nothing but the cursor.
-8. **Do not duplicate MDC functionality.** The page already has Search Person
-   and Search Vehicle boxes; the shell drives those instead of adding its own.
-9. **Never force `height` or `overflow` on `html`, `body` or `.wrapper`.**
-   Material Dashboard derives its layout from them; forcing them crammed the
-   page into a sliver. Scrollbar duplication is fixed at runtime by measuring.
-10. **Never set `display` on the embedded view, and never anything but `flex`.**
-    Electron gives `webview` `display: flex` so its internal frame fills the
-    element. Overriding it with `block` left the frame at its intrinsic 150px
-    height, so the whole page rendered in a short strip at the top of the window
-    with its own scrollbar. Width filled correctly throughout, which is what
-    made it look like a page bug. `renderer.js` also sets explicit pixel sizes
-    as a safety net.
-11. **Do not un-cap image sizing.** Removing the site's `max-height` from images
-    let the state seal render at natural size and inflated the document to
-    several screens tall.
-12. **Only skin the MDC host.** Authentication pages must render stock.
-13. **Never use backticks in a comment inside a JavaScript template literal.**
-    It terminates the literal and breaks the file. Moot now: no comments.
-14. **When the markup is unknown, target by content, not by class.** The WANTED
-    banner, the Criminal Points meter, the Age field and the Message of the Day
-    colour pickers were guessed at with `:has()` selectors for three rounds and
-    missed every time. They are now found by their own text, walking up only
-    through wrappers containing nothing else, and every change is recorded on
-    the element so the Original MDC skin restores it.
-15. **`node --check` is not enough.** Only a runtime test catches a renderer
-    that throws on load. Run `npm run smoke`.
-16. **Contrast is enforced at runtime,** because inline colours from the site
-    can be unreadable on a repainted background.
-17. **Give dialog fields one fixed height, but never buttons.** Fields look
-    right at a fixed height. Buttons need a minimum height instead: forcing an
-    exact height pushed dropdown carets outside their box, where they also
-    swallowed the click.
-18. **Never set a notification container's position.** The library places it
-    itself. Overriding that dropped each toast into page flow, so it appeared
-    half off-screen, sometimes scrolled out of sight, and then timed out.
-19. **Never hide a vertical scrollbar based on one measurement.** Content that
-    grows later, such as added charges, is then clipped with no way to reach it.
-    Only sideways scrollbars are trimmed, and only where content genuinely fits.
-20. **Do not give `.dropdown-menu` visible overflow.** It stops long option
-    lists from scrolling. Let the button group overflow instead.
-21. **Never touch scrolling inside a dialog or a dropdown.** Both are managed by
-    the site's own scripts, which size and scroll them at the moment they open.
-    Every override here produced either extra scrollbars or option lists that
-    could not be reached, so dialogs and dropdowns now keep their own scrolling
-    and receive colour only.
-22. **Never let a measuring pass toggle a property back and forth.** Hiding a
-    scrollbar changes the measurement that decided to hide it, so the next pass
-    reverses the decision and the element flickers and loses its scroll position.
-    Decisions are made once per element per page load.
-23. **Keep the scrollbar narrow and reserve its space.** A wide bar over a layout
-    built for full width draws across the content beside it.
-24. **Rate-limit sounds per tone, and never restart one that is still playing.**
-    Repeated clicks on a button such as add-charge otherwise stack the same clip
-    over itself.
-
-21. Never set `max-height` or `overflow` on `.dropdown-menu`, `div.inner` or `.bootstrap-select`. bootstrap-select sizes and scrolls its own option list when it opens; any override produces a clipped list that cannot be scrolled.
-22. Never add a scroller inside a Bootstrap dialog. The dialog already scrolls, and the site adds its own scroller, so a third one appears.
-23. Never force `overflow: visible` on dialog containers. It looks harmless, but a container that scrolls natively will then let its rows spill out and be painted over by the block below it.
-24. Prefer content-driven matching over element ids for optional UI. Field labels survive page changes; ids do not.
-25. Some parts of the MDC must be left alone entirely. Add Arrest Report and Charges lays its rows out with Bootstrap's grid and absolute positioning; any change to button display or row alignment inside it breaks the charge rows. Recolour it, never re-layout it.
+Araçlar > Yerleşim Raporu; pencere boyutunu, gömülü görünümün boyutunu, sayfa
+görüntü alanını ve belge boyutunu, bunların oranını ve görüntü alanından uzun
+öğeleri gösterir. Uygulama kabuğundaki boyutlandırma sorunlarını sayfa
+sorunlarından ayırmanın en hızlı yoludur.
 
 ---
 
-## Keyboard shortcuts and remapping
+## 6. Deneyimle öğrenilen kurallar
 
-Help > Keyboard Shortcuts (F1) lists every shortcut in one table. Press **Change**
-on a row and then the combination you want; Escape cancels the capture. If the
-combination is already used, it is taken from the other action and the window
-says so. **Reset to defaults** clears every remap.
+Bu maddelerin her biri ekranda görünen bir hataya yol açtı. Kodda artık yorum
+satırı bulunmadığından, tekrarlanmaması gerekenleri burada topladık.
 
-Remaps are stored on this computer, and the map is also pushed into the embedded
-MDC pages, so a key pressed while the page has focus does the same thing as one
-pressed on the client chrome. Only plain function keys and single-letter Ctrl
-combinations can reach inside a page; anything more elaborate works on the client
-itself. Escape is deliberately not remappable — it always closes the find bar,
-then a dialog, then stops a loading page.
+1. **`font-family` listesine `inherit` eklemeyin.** Geçerli bir değer değildir
+   ve bildirimin tamamını geçersiz kılar; sonuçta tüm simgeler boş kareye döner.
+2. **Genel bir `transition: none` veya `animation: none` kuralı uygulamayın.**
+   Bootstrap açma ve kapama işlemlerini geçiş olaylarıyla yürütür. Bunları
+   kaldırmak panellerin açık kalmasına neden olur.
+3. **`transition: revert` çözüm değildir.** Tarayıcının varsayılanına döner ve
+   yazarın tanımladığı geçişi yok sayar. Süreyi açıkça belirtin.
+4. **Bootstrap'in animasyon uyguladığı bir özelliği sabitlemeyin.** Değer
+   değişmeyince `transitionend` olayı oluşmaz, iç geçiş bayrağı açık kalır ve
+   sonraki gösterme çağrıları erken döner.
+5. **`.modal` öğesine arka plan vermeyin.** Bu öğe tüm pencereyi kaplayan
+   kapsayıcıdır; görünen panel `.modal-content` öğesidir. Kapsayıcıyı boyamak
+   pencerenin tamamını griye çevirip tıklamaları engeller; dosya yüklemelerinin
+   çalışmıyor gibi görünmesinin nedeni buydu.
+6. **`input[type="file"]` alanlarını ve kırpma araçlarını biçimlendirmeyin**
+   (`all: revert`).
+7. **Yan panelde etkin satırı mavi üzerinde beyaz yapmayın.** Yan panel simgeleri
+   panel rengini devralmamalı; fareyle üzerine gelindiğinde imleç dışında hiçbir
+   şey değişmemelidir.
+8. **MDC işlevlerini yeniden oluşturmayın.** Sayfada zaten Kişi Sorgula ve Araç
+   Sorgula alanları bulunur; uygulama kendi alanlarını eklemek yerine bunları
+   kullanır.
+9. **`html`, `body` veya `.wrapper` için `height` ya da `overflow` değerini
+   zorlamayın.** Material Dashboard yerleşimini bu öğelere göre kurar. Bu
+   değerleri zorlamak sayfayı ince bir şeride sıkıştırmıştı. Yinelenen kaydırma
+   çubukları çalışma sırasında ölçüm yapılarak giderilir.
+10. **Gömülü görünümün `display` değerini değiştirmeyin; `flex` dışında bir
+    değer kullanmayın.** Electron, iç çerçevenin öğeyi doldurması için
+    `webview` öğesine `display: flex` verir. Bunu `block` yapmak çerçeveyi doğal
+    150 piksel yüksekliğinde bırakıp sayfayı pencerenin üstünde kısa bir şerit ve
+    ayrı kaydırma çubuğu olarak gösterir. Genişlik doğru dolduğu için sorun ilk
+    bakışta sayfadan kaynaklanıyor gibi görünmüştü. Ek güvence olarak
+    `renderer.js` açık piksel boyutları da atar.
+11. **Görsel boyutu sınırını kaldırmayın.** Sitenin görsellerindeki `max-height`
+    sınırını kaldırmak eyalet mührünün doğal boyutta çizilmesine ve belgenin
+    birkaç ekran boyu uzamasına neden oldu.
+12. **Yalnızca MDC ana makinesine tema uygulayın.** Kimlik doğrulama sayfaları
+    özgün stilleriyle gösterilmelidir.
+13. **JavaScript şablon dizgesi içindeki yorumlarda ters tırnak kullanmayın.**
+    Dizgeyi erken kapatıp dosyayı bozar. Artık yorum satırı kullanılmadığı için
+    bu kuralın pratikte önemi kalmadı.
+14. **İşaretleme yapısı bilinmiyorsa sınıfa değil içeriğe göre hedefleyin.**
+    ARANIYOR bandı, Ceza Puanı göstergesi, Yaş alanı ve Günün Mesajı renk
+    seçicileri üç tur boyunca `:has()` seçicileriyle tahmin edildi ve her defasında
+    yanlış eşleşti. Artık kendi metinlerinden bulunuyor, yalnızca başka içerik
+    barındırmayan üst kapsayıcılara çıkılıyor ve yapılan her değişiklik öğeye
+    kaydediliyor; böylece Özgün MDC teması değişiklikleri geri alabiliyor.
+15. **Tek başına `node --check` yeterli değildir.** Yalnızca çalışma zamanı testi,
+    yüklenirken hata veren renderer'ı yakalar. `npm run smoke` çalıştırın.
+16. **Kontrast çalışma sırasında korunur.** Sitenin satır içi renkleri,
+    yeniden boyanmış arka plan üzerinde okunamaz olabilir.
+17. **İletişim penceresi alanlarına sabit yükseklik, düğmelere ise yalnızca
+    minimum yükseklik verin.** Alanlar sabit yükseklikte düzgün görünür. Düğmeleri
+    sabit yüksekliğe zorlamak açılır menü oklarını kutunun dışına itmiş ve
+    tıklamaları engellemişti.
+18. **Bildirim kapsayıcısının konumunu ayarlamayın.** Konumu kütüphane belirler.
+    Üzerine yazıldığında bildirimler sayfa akışına düşüyor, ekranın yarısında
+    görünüyor, bazen görünüm dışına kayıyor ve süreleri doluyordu.
+19. **Tek bir ölçüme bakarak dikey kaydırma çubuğunu gizlemeyin.** Sonradan
+    eklenen ücretler gibi içerikler kesilir ve erişilemez olur. Yalnızca içerik
+    gerçekten sığıyorsa yatay kaydırma çubukları kaldırılır.
+20. **`.dropdown-menu` için `overflow: visible` kullanmayın.** Uzun seçenek
+    listelerinin kaydırılmasını engeller. Bunun yerine düğme grubunun taşmasına
+    izin verin.
+21. **İletişim penceresi veya açılır menü içindeki kaydırmayı değiştirmeyin.**
+    Site betikleri bu öğeleri açılırken boyutlandırır ve kaydırır. Üzerine yazılan
+    her kural ek kaydırma çubuklarına veya erişilemeyen listelere yol açtı. Artık
+    bu öğelerin kendi kaydırmaları korunuyor, yalnızca renkleri değiştiriliyor.
+22. **Ölçüm sırasında bir özelliği tekrar tekrar açıp kapatmayın.** Kaydırma
+    çubuğunu gizlemek, gizleme kararını veren ölçümü değiştirir; sonraki tur
+    kararı tersine çevirerek titreşmeye ve kaydırma konumunun kaybolmasına yol
+    açar. Her öğe için karar sayfa yüklemesinde bir kez verilir.
+23. **Kaydırma çubuğunu dar tutun ve kapladığı alanı ayırın.** Tam genişlik için
+    tasarlanan bir yerleşimin üzerine geniş kaydırma çubuğu çizilirse yanındaki
+    içeriği kapatır.
+24. **Sesleri tür başına sınırlandırın ve çalmakta olan sesi yeniden başlatmayın.**
+    Aksi halde ücret ekleme gibi bir düğmeye art arda basıldığında aynı ses
+    üst üste çalar.
 
-Ctrl+N and Ctrl+L open small **Name Check** and **Plate Check** windows: type,
-press Enter, and the query runs and is logged. Previously these only focused the
-toolbar fields, which did nothing when the lookup fields were hidden.
+21. `.dropdown-menu`, `div.inner` veya `.bootstrap-select` üzerinde `max-height`
+    ya da `overflow` değerini zorlamayın. bootstrap-select açılırken seçenek
+    listesini kendisi boyutlandırıp kaydırır; her müdahale kaydırılamayan, kesik
+    bir liste oluşturur.
+22. Bootstrap iletişim penceresinin içine kaydırma alanı eklemeyin. Pencere zaten
+    kayar ve site kendi kaydırma alanını ekler; üçüncü bir kaydırma alanı ortaya
+    çıkar.
+23. İletişim penceresi kapsayıcılarında `overflow: visible` zorlamayın. Zararsız
+    görünse de doğal olarak kaydırılan kapsayıcının satırları dışarı taşar ve
+    alttaki blok tarafından örtülür.
+24. İsteğe bağlı arayüz öğelerini eşleştirirken öğe kimlikleri yerine içeriği
+    kullanmayı tercih edin. Alan etiketleri sayfa değişikliklerinde kalır,
+    kimlikler kalmayabilir.
+25. MDC'nin bazı bölümlerine hiç dokunulmamalıdır. Tutuklama Raporu Ekle
+    (Add Arrest Report) ve Ücretler (Charges),
+    satırlarını Bootstrap ızgarası ve mutlak konumlandırmayla yerleştirir; içindeki
+    düğme görünümünü veya satır hizasını değiştirmek ücret satırlarını bozar.
+    Yeniden yerleşim uygulamayın, yalnızca renklerini değiştirin.
 
-## Updates
+---
 
-Help > About has a **Check for Updates** button. It reads the public release list
-for the project and compares the newest tag with the running version. If a newer
-release exists, an **Update Now** button appears, which downloads the release
-installer, hands it to Windows and closes the client so the files can be
-replaced. There is also **Open Release Page** if you would rather do it by hand.
+## Klavye kısayolları ve yeniden atama
 
-An optional check when the client starts can be switched on under
-Tools > Options > Window; it is off by default. Nothing is ever downloaded or
-installed without pressing Update, and no information about you is sent — the
-check is a plain read of the public release list.
+Yardım > Klavye Kısayolları (F1) tüm kısayolları tek tabloda listeler. Bir
+satırdaki **Değiştir** düğmesine basıp istediğiniz tuş birleşimine basın; Escape
+kaydı iptal eder. Birleşim başka bir eylemde kullanılıyorsa o eylemden alınır ve
+pencere bunu bildirir. **Varsayılanları geri yükle** tüm özel atamaları temizler.
 
-For the automatic check and the Update button to be useful, releases have to be
-published on the project page with the installer attached as a release asset, and
-the tag has to be the version number (for example `v1.0.2`).
+Yeni atamalar bu bilgisayarda saklanır ve gömülü MDC sayfalarına da iletilir.
+Böylece sayfa odaktayken basılan bir tuş, uygulama arayüzü odaktayken olduğu gibi
+çalışır. Sayfa içinde yalnızca değiştiricisiz işlev tuşları ve tek harfli Ctrl
+birleşimleri kullanılabilir; daha karmaşık birleşimler yalnızca istemcide çalışır.
+Escape yeniden atanamaz: önce arama çubuğunu, sonra iletişim penceresini kapatır;
+ardından yüklenen sayfayı durdurur.
 
+Ctrl+N ve Ctrl+L küçük **İsim Sorgusu** ve **Plaka Sorgusu** pencerelerini açar.
+Bilgiyi yazıp Enter'a basınca sorgu çalıştırılır ve geçmişe kaydedilir. Önceden bu
+kısayollar yalnızca araç çubuğu alanlarına odaklanıyordu; sorgu alanları gizliyken
+bu işlem sonuç vermiyordu.
 
-## Implementation notes
+## Güncellemeler
 
-The source files carry no inline comments. The behaviour that used to be
-explained there is recorded here instead.
+Yardım > Hakkında penceresindeki **Güncellemeleri Denetle** düğmesi, projenin
+herkese açık sürüm listesini okur ve en yeni etiketi çalışan sürümle karşılaştırır.
+Daha yeni bir sürüm varsa **Şimdi Güncelle** düğmesi görünür. Bu düğme kurulum
+paketini indirip Windows'a açtırır ve dosyaların değiştirilmesi için istemciyi
+kapatır. Güncellemeyi elle yapmak isterseniz **Sürüm Sayfasını Aç** düğmesini de
+kullanabilirsiniz.
 
-**Skin boot.** Each page stores the active skin in its own local storage and
-repaints itself from that value before the site renders. The loader accepts
-every skin name; while it only accepted `light`, `dark` and `off`, an Aero or
-LAPD page booted painted as classic light and corrected itself a second later,
-which is what caused the visible flash of old visuals. The glass layer is
-applied in that same first pass.
+İstemci açılırken denetim yapılması Araçlar > Ayarlar > Pencere bölümünden
+etkinleştirilebilir; varsayılan olarak kapalıdır. Güncelle düğmesine basmadan
+hiçbir şey indirilmez veya kurulmaz ve hakkınızda bilgi gönderilmez; denetim,
+herkese açık sürüm listesinin okunmasından ibarettir.
 
-**Pop-up dragging.** A dialog is moved with a CSS transform and never leaves
-its normal layout position, so Bootstrap's own dismiss logic keeps working.
-The offset is remembered on the element between drags and cleared whenever the
-dialog is shown or hidden, so a dialog always reopens centred and in view.
-The click-through behaviour that keeps the MDC usable behind a pop-up is only
-armed once a dialog has actually been dragged; until then dialogs behave
-exactly as the site intends.
+Otomatik denetimin ve Güncelle düğmesinin çalışması için kurulum dosyasının proje
+sayfasında bir GitHub Release varlığı olarak yayımlanması gerekir. Sürüm etiketi
+de sürüm numarasıyla eşleşmelidir (örneğin `v1.0.0`).
 
-**Panels.** Cards use a flat pale face from the palette with a light outline,
-a 6px frame and a drop shadow, over a tinted page background. Card headers are
-transparent so only their text shows. Collapse toggles are pinned inside their
-own header at a fixed size; pinning every absolutely positioned child of a card
-was what pushed stray squares outside the panels.
+## Uygulama notları
 
-**Images.** Pictures are limited to the width of their panel. Only pictures
-that declare no size of their own are scaled by height, because forcing that on
-every image collapsed department crests down to their natural size. Warrant
-seals are given an explicit height.
+Kaynak dosyalarda satır içi açıklama yoktur. Önceden kod içinde açıklanan
+davranışlar burada kayıtlıdır.
 
-**Discord presence.** Rich presence is spoken directly over Discord's local
-socket, with no third-party dependency. It is off by default and every failure
-is silent, since "Discord is not running" is the normal case. The application
-id lives at the top of the Discord section in `main.js`, and the icon must be
-uploaded to that Discord application's Rich Presence art assets under the key
-`app_icon`.
+**Tema başlangıcı.** Her sayfa etkin temasını kendi yerel depolama alanında tutar
+ve site çizilmeden önce bu temayı uygular. Yükleyici tüm tema adlarını kabul
+etmelidir. Yalnızca `light`, `dark` ve `off` kabul edildiği dönemde Aero veya LAPD
+sayfaları önce Klasik Açık temayla açılıyor, bir saniye sonra düzeliyordu; eski
+görselin kısa süre parlamasının nedeni buydu. Cam katmanı da aynı ilk geçişte
+uygulanır.
 
-**Supervisor features.** Some views available to supervisors and high ranking
-officers may behave incorrectly, because the page source for them was never
-available. This client was built by reading the page source of the web MDC.
+**Açılır pencereleri sürükleme.** İletişim penceresi CSS dönüşümüyle taşınır ve
+normal yerleşim konumundan ayrılmaz; böylece Bootstrap'in kapatma mantığı
+çalışmaya devam eder. Ofset, sürüklemeler arasında öğede tutulur ve pencere
+gösterildiğinde ya da gizlendiğinde temizlenir. Böylece pencere her açılışta
+ortalanmış ve görünür olur. Açılır pencerenin arkasındaki MDC'ye tıklamayı
+sağlayan davranış yalnızca pencere gerçekten sürüklendikten sonra etkinleşir;
+öncesinde pencereler sitenin tasarladığı gibi davranır.
+
+**Paneller.** Kartlar renk paletinden düz ve açık bir yüzey, ince bir kenarlık,
+6 piksel çerçeve ve gölge alır; sayfa arka planı hafif renklidir. Kart başlıkları
+saydamdır, yalnızca metinleri görünür. Daraltma düğmeleri kendi başlıklarında,
+sabit boyutla konumlandırılır. Kartın mutlak konumlandırılmış her alt öğesini
+sabitlemek, başıboş karelerin panel dışına taşmasına neden olmuştu.
+
+**Görseller.** Resimler panellerinin genişliğiyle sınırlandırılır. Yükseklik,
+yalnızca kendi boyutunu belirtmeyen görsellere uygulanır; bunu tüm görsellere
+zorlamak departman armalarını doğal boyutlarına indiriyordu. Arama emri mühürleri
+için yükseklik ayrıca belirtilir.
+
+**Discord durumu.** Zengin Durum (Rich Presence), üçüncü taraf bağımlılık olmadan
+doğrudan Discord'un yerel soketi üzerinden gönderilir. Varsayılan olarak kapalıdır ve
+Discord'un çalışmaması olağan durum olduğundan hatalar sessizce geçilir.
+Uygulama kimliği `main.js` içindeki Discord bölümünün başında bulunur. Simge,
+ilgili Discord uygulamasının Rich Presence görsel varlıklarına `app_icon` anahtarı
+altında yüklenmelidir.
+
+**Amir özellikleri.** Amirlerin ve üst rütbeli memurların erişebildiği bazı
+görünümler yanlış çalışabilir; bu sayfaların kaynak koduna erişim yoktu. İstemci,
+web MDC'nin sayfa kaynak kodu incelenerek geliştirildi.

@@ -204,7 +204,7 @@ const RECORD_URL = 'https://mdc-tr.gta.world/record/'
 const DMV_URL = 'https://mdc-tr.gta.world/dmv/'
 const PENAL_URL = 'https://forum-tr.gta.world/index.php?/topic/77-san-andreas-ceza-kanunu/'
 
-const APP_NAME = 'PatrolOne Mobil İstemcisi'
+const APP_NAME = 'Mobile Data Computer - GTA World TR'
 const REPO_URL = 'https://github.com/wolfaeger/GTA-World-Turkey-MDC'
 
 const SKIN_CLASSES = ['dark', 'lapd', 'aero', 'aerolapd', 'aerodark', 'off']

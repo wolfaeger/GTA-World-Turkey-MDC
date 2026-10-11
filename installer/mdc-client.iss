@@ -1,7 +1,7 @@
-#define AppName "PatrolOne Mobil İstemcisi"
-#define AppVersion "1.0.4"
-#define AppPublisher "PatrolOne Mobil İstemcisi"
-#define AppExe "PatrolOne Mobil İstemcisi.exe"
+#define AppName "Mobile Data Computer - GTA World TR"
+#define AppVersion "1.0.0"
+#define AppPublisher "Mobile Data Computer - GTA World TR"
+#define AppExe "Mobile Data Computer - GTA World TR.exe"
 #define SourceDir "..\dist\win-unpacked"
 
 [Setup]
@@ -15,7 +15,7 @@ DefaultGroupName={#AppName}
 UninstallDisplayIcon={app}\{#AppExe}
 UninstallDisplayName={#AppName}
 OutputDir=Output
-OutputBaseFilename=PatrolOne-Mobil-Istemcisi-Kurulum-{#AppVersion}
+OutputBaseFilename=Mobile-Data-Computer-GTA-World-TR-Setup-{#AppVersion}
 SetupIconFile=..\build\icon.ico
 Compression=lzma2/max
 SolidCompression=yes
@@ -38,8 +38,8 @@ Name: "startmenuicon"; Description: "Başlat menüsü kısayolu oluştur"; Group
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: startmenuicon
-Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
+Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExe}"; IconFilename: "{app}\build\icon.ico"; Tasks: startmenuicon
+Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; IconFilename: "{app}\build\icon.ico"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "{#AppName} uygulamasını başlat"; Flags: nowait postinstall skipifsilent

@@ -127,10 +127,10 @@ function createTray() {
     tray = null
     return
   }
-  tray.setToolTip('PatrolOne Mobil İstemcisi')
+  tray.setToolTip('Mobile Data Computer - GTA World TR')
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: 'PatrolOne Mobil İstemcisini Aç', click: showWindow },
+      { label: 'Uygulamayı Aç', click: showWindow },
       { type: 'separator' },
       {
         label: 'Çıkış',
@@ -170,7 +170,7 @@ function createWindow() {
     height: 860,
     minWidth: 900,
     minHeight: 600,
-    title: 'PatrolOne Mobil İstemcisi',
+    title: 'Mobile Data Computer - GTA World TR',
     icon: path.join(__dirname, 'build', 'icon.ico'),
     backgroundColor: '#F0F0F0',
     autoHideMenuBar: true,
@@ -266,7 +266,7 @@ app.on('web-contents-created', (_event, contents) => {
 })
 
 const REPO = 'wolfaeger/GTA-World-Turkey-MDC'
-const UA = 'PatrolOne-Mobile-Client'
+const UA = 'MDC-GTA-World-TR'
 
 function httpsJson(url, depth) {
   return new Promise((resolve, reject) => {
@@ -364,7 +364,7 @@ ipcMain.handle('app:checkUpdates', async () => {
 
 ipcMain.handle('app:installUpdate', async (_e, payload) => {
   const url = String((payload && payload.url) || '')
-  const name = String((payload && payload.name) || 'PatrolOne-Update.exe').replace(/[^\w.\-]/g, '_')
+  const name = String((payload && payload.name) || 'Mobile-Data-Computer-GTA-World-TR-Update.exe').replace(/[^\w.\-]/g, '_')
   if (!/^https:\/\//i.test(url)) return { ok: false, error: 'That download link is not usable.' }
   const dest = path.join(app.getPath('temp') || os.tmpdir(), name)
   try {
@@ -515,7 +515,7 @@ function rpcPushActivity() {
         timestamps: { start: rpcWanted.since || Date.now() },
         assets: {
           large_image: DISCORD_LARGE_IMAGE,
-          large_text: 'PatrolOne Mobile Client'
+          large_text: 'Mobile Data Computer - GTA World TR'
         },
         instance: false
       }

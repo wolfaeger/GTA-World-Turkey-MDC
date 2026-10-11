@@ -1,9 +1,9 @@
 {
   "name": "mdc-client",
-  "version": "1.0.4",
-  "description": "PatrolOne Mobil İstemcisi - GTA World Türkçe Web MDC masaüstü istemcisi",
+  "version": "1.0.0",
+  "description": "Mobile Data Computer - GTA World TR masaüstü istemcisi",
   "main": "main.js",
-  "author": "PatrolOne Mobile Client",
+  "author": "Mobile Data Computer - GTA World TR",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -19,8 +19,8 @@
   },
   "build": {
     "appId": "world.gta.mdcclient",
-    "productName": "PatrolOne Mobil İstemcisi",
-    "artifactName": "PatrolOne-Mobil-Istemcisi-Kurulum-${version}.${ext}",
+    "productName": "Mobile Data Computer - GTA World TR",
+    "artifactName": "Mobile-Data-Computer-GTA-World-TR-Setup-${version}.${ext}",
     "files": [
       "main.js",
       "preload.js",
@@ -48,7 +48,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "PatrolOne Mobil İstemcisi"
+      "shortcutName": "Mobile Data Computer - GTA World TR"
     }
   }
 }
