@@ -45,7 +45,8 @@
       <div class="menu-item" data-action="togglesidebar" id="mi-sidebar">MDC Yan Paneli<span class="accel">F10</span></div>
       <div class="menu-sep"></div>
       <div class="menu-item" data-action="tabmdc">Mobil Veri Bilgisayarı<span class="accel">Ctrl+1</span></div>
-      <div class="menu-item" data-action="tabpenal">San Andreas Ceza Kanunu<span class="accel">Ctrl+2</span></div>
+      <div class="menu-item" data-action="tablssd">LSSD Intranet<span class="accel">Ctrl+2</span></div>
+      <div class="menu-item" data-action="tabpenal">San Andreas Ceza Kanunu<span class="accel">Ctrl+3</span></div>
     </div>
   </div>
 
@@ -129,7 +130,8 @@
 
 <div id="tabs" class="tabs">
   <button class="tab active" id="tab-mdc" title="Mobil Veri Bilgisayarı (Ctrl+1)">Mobil Veri Bilgisayarı</button>
-  <button class="tab" id="tab-penal" title="San Andreas Ceza Kanunu (Ctrl+2)">Ceza Kanunu</button>
+  <button class="tab" id="tab-lssd" title="LSSD Intranet (Ctrl+2)">LSSD Intranet</button>
+  <button class="tab" id="tab-penal" title="San Andreas Ceza Kanunu (Ctrl+3)">Ceza Kanunu</button>
   <span id="tab-nav" class="tabnav hidden"></span>
 </div>
 
@@ -158,6 +160,13 @@
     src="about:blank"
     partition="persist:gtaw-mdc"
     preload="../forum-preload.js"
+    class="wv-off"
+    allowpopups>
+  </webview>
+  <webview
+    id="lssd"
+    src="about:blank"
+    partition="persist:gtaw-mdc"
     class="wv-off"
     allowpopups>
   </webview>

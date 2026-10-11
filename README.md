@@ -205,10 +205,11 @@ için `click.mp3`, pencere kapatma, bildirimi kapatma veya geri gitme için
 için `error.mp3`. Sesleri değiştirmek için dosyaları yenileriyle değiştirin;
 dosya adları sabittir.
 
-### Ceza Kanunu sekmesi
+### Uygulama sekmeleri
 
-Sayfa alanının üzerinde Mobil Veri Bilgisayarı ve Ceza Kanunu olmak üzere iki
-sekme bulunur (Ctrl+1 ve Ctrl+2; ayrıca Görünüm menüsünde). Ceza Kanunu sekmesi,
+Sayfa alanının üzerinde Mobil Veri Bilgisayarı, LSSD Intranet ve Ceza Kanunu
+sekmeleri bulunur (sırasıyla Ctrl+1, Ctrl+2 ve Ctrl+3; ayrıca Görünüm menüsünde).
+LSSD Intranet sekmesi LSSD Portal giriş sayfasını uygulama içinde açar. Ceza Kanunu sekmesi,
 GTA World forumlarındaki San Andreas Ceza Kanunu konusunu yükler ve yalnızca
 kanun metnini bırakır. Forum başlığı, gezinme alanları, içerik yolu, alt bilgi,
 yazar panelleri, gönderi kontrolleri, tepkiler, sayfalama ve profil bağlantıları

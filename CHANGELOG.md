@@ -15,6 +15,7 @@ GTA World TR için ilk herkese açık sürüm. Önceki geliştirme sürümlerind
 - Seçicideki özel renk alanı yeniden doğru bir renk girişi olarak görüntüleniyor.
 
 ### Gezinme
+- Hızlı kısayollardan, ana sayfaya yönlendiren Sevk düğmesi kaldırıldı. Üst sekme sırasına LSSD Intranet eklendi; Ceza Kanunu artık üçüncü sekme.
 - Gezinme çubuğu artık Font Awesome dolu simgelerini ve çok daha geniş bir simge eşlemesini kullanıyor: ana sayfa, kişi sorgusu, APB, evraklar, tutuklama sonrası işlemler, etkin arama emirleri, arama emirleri, acil durum, DMV, haritalar, veritabanları, ceza kanunu, profil, oturumu kapatma ve daha fazlası.
 - Gezinme sekmelerindeki simgeler daha düzgün hizalandı, etkin sekme vurgu çubuğuyla belirginleştirildi ve oturumu kapatma sekmesinin kendine özgü stili korundu.
 - Font Awesome'a erişilemezse çubuk boş kalmasın diye istemci otomatik olarak yerleşik simge karakterlerine geçiyor.
@@ -154,7 +155,7 @@ Büyük bir güncelleme. İstemci yeni bir tema motoruyla yeniden oluşturuldu; 
 - Aynı anda birden fazla MDC sayfası, her biri ayrı görünümde açılabilir. Böylece öndeki başka bir sayfada çalışırken kayıtların kaydırma konumu ve yarım doldurulmuş formları korunur. Sekmelerin altındaki sayfa şeridinde her sayfanın kapatma düğmesi ve yeni sayfa düğmesi bulunur. Ctrl+T sayfa açar, Ctrl+W kapatır; sitenin yeni pencerede açacağı bağlantılar açılır pencere yerine yeni sayfada gösterilir.
 - Sayfalar, sitenin başlığını tekrarlamak yerine içeriklerine göre gezinme adı veya kayıt numarasıyla adlandırılır.
 - Bir gezinme düğmesine, hızlı kısayola veya bağlantıya sağ tıklayarak onu öndeki sayfanın yerine açmak yerine yeni sayfada açabilirsiniz.
-- İsteğe bağlı MDC gezinme çubuğu yan panel bağlantılarını sekme olarak gösterir; yan panelin kendisi gizlenip kilitlenebilir. Hızlı kısayollar, sekme şeridinin altındaki adlandırılabilir ve açılıp kapatılabilir Ana Sayfa, Sorgu, Trafik, C6, Çağrılar ve Sevk simgeleridir.
+- İsteğe bağlı MDC gezinme çubuğu yan panel bağlantılarını sekme olarak gösterir; yan panelin kendisi gizlenip kilitlenebilir. Hızlı kısayollar, sekme şeridinin altındaki adlandırılabilir ve açılıp kapatılabilir Ana Sayfa, Sorgu, Trafik, C6 ve Çağrılar simgeleridir.
 - Açılır pencereler başlık çubuklarından sürüklenebilir; arkadaki sayfa kullanılmaya devam eder.
 
 ### Geçmiş, uyarılar ve bildirimler

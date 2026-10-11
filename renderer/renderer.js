@@ -20,6 +20,7 @@ function boot(label, fn) {
 
 let wv = el('mdc')
 const pcv = el('penal')
+const lssdView = el('lssd')
 const pcBar = el('pc-bar')
 const pcSearch = el('pc-search')
 const tabNav = el('tab-nav')
@@ -28,7 +29,9 @@ const hdrCtl = el('hdr-ctl')
 let activeTab = 'mdc'
 
 function activeView() {
-  return activeTab === 'penal' && pcv ? pcv : wv
+  if (activeTab === 'penal' && pcv) return pcv
+  if (activeTab === 'lssd' && lssdView) return lssdView
+  return wv
 }
 
 const PAGE_PARTITION = 'persist:gtaw-mdc'
@@ -203,6 +206,7 @@ const HOME = 'https://mdc-tr.gta.world/'
 const RECORD_URL = 'https://mdc-tr.gta.world/record/'
 const DMV_URL = 'https://mdc-tr.gta.world/dmv/'
 const PENAL_URL = 'https://forum-tr.gta.world/index.php?/topic/77-san-andreas-ceza-kanunu/'
+const LSSD_URL = 'https://lssdportal.online/login'
 
 const APP_NAME = 'Mobile Data Computer - GTA World TR'
 const REPO_URL = 'https://github.com/wolfaeger/GTA-World-Turkey-MDC'
@@ -403,6 +407,7 @@ const PRESENCE_BY_KIND = {
 
 function presenceDetails() {
   if (activeTab === 'penal') return 'Ceza kanununa bakıyor'
+  if (activeTab === 'lssd') return 'LSSD Intranet kullanıyor'
   const page = findPage(activePageId)
   const kind = page ? histKind(page.url) : ''
   return PRESENCE_BY_KIND[kind] || 'MDC kullanıyor'
@@ -1372,7 +1377,7 @@ function showOptions() {
     '</fieldset>' +
     '<fieldset class="opt-group"><legend>Hızlı Kısayollar</legend>' +
     check('quickLinks', 'Hızlı kısayol çubuğu (sekmelerin altındaki simgeler)') +
-    '<p class="opt-note">Ana Sayfa, Sorgu, Trafik, C6, Çağrılar ve Sevk için büyük simgeler özel temalarda sekmelerin altında gösterilir.</p>' +
+    '<p class="opt-note">Ana Sayfa, Sorgu, Trafik, C6 ve Çağrılar için büyük simgeler özel temalarda sekmelerin altında gösterilir.</p>' +
     '</fieldset>' +
     '<fieldset class="opt-group"><legend>Yerleşim</legend>' +
     check('toolbar', 'Araç çubuğu') +
@@ -1536,8 +1541,7 @@ const QUICK_BUTTONS = [
   { icon: 'query.png', label: 'Sorgu', match: /person lookup|kişi sorgu|şahıs sorgu/i, url: HOME },
   { icon: 'traffic.png', label: 'Trafik', match: /dmv database|motorlu taşıt|plaka/i, url: DMV_URL },
   { icon: 'c6.png', label: 'C6', match: /vehicle map|araç haritası/i, url: HOME + 'map/vehicles' },
-  { icon: 'calls.png', label: 'Çağrılar', match: /incident database|olay veritabanı|olay listesi/i, url: HOME + 'emergency/list' },
-  { icon: 'dispatch.png', label: 'Sevk', match: /active warrants|warrants database|online warrants|aktif arama|arama emirleri/i, url: HOME }
+  { icon: 'calls.png', label: 'Çağrılar', match: /incident database|olay veritabanı|olay listesi/i, url: HOME + 'emergency/list' }
 ]
 
 function quickTarget(btn) {
@@ -1804,8 +1808,9 @@ function setNav(items) {
 }
 
 function showTab(name) {
-  activeTab = name === 'penal' ? 'penal' : 'mdc'
+  activeTab = name === 'penal' || name === 'lssd' ? name : 'mdc'
   const penal = activeTab === 'penal'
+  const lssd = activeTab === 'lssd'
   if (pcv) {
     pcv.classList.toggle('wv-off', !penal)
     if (penal && pcv.getAttribute('data-loaded') !== '1') {
@@ -1816,17 +1821,32 @@ function showTab(name) {
       }
     }
   }
+  if (lssdView) {
+    lssdView.classList.toggle('wv-off', !lssd)
+    if (lssd && lssdView.getAttribute('data-loaded') !== '1') {
+      lssdView.setAttribute('data-loaded', '1')
+      try {
+        lssdView.loadURL(LSSD_URL)
+      } catch (err) {
+        console.error('[shell] failed to load LSSD Intranet', err)
+        setStatus('LSSD Intranet açılamadı')
+      }
+    }
+  }
   allPageViews().forEach((v) => {
-    if (v) v.classList.toggle('wv-off', penal || v !== wv)
+    if (v) v.classList.toggle('wv-off', activeTab !== 'mdc' || v !== wv)
   })
   renderPageBar()
   if (pcBar) pcBar.classList.toggle('hidden', !penal)
   const tabMdc = document.getElementById('tab-mdc')
+  const tabLssd = document.getElementById('tab-lssd')
   const tabPenal = document.getElementById('tab-penal')
-  if (tabMdc) tabMdc.classList.toggle('active', !penal)
+  if (tabMdc) tabMdc.classList.toggle('active', activeTab === 'mdc')
+  if (tabLssd) tabLssd.classList.toggle('active', lssd)
   if (tabPenal) tabPenal.classList.toggle('active', penal)
+  updateNav()
   document.dispatchEvent(new Event('mdc:chrome-changed'))
-  setStatus(penal ? 'San Andreas Ceza Kanunu' : 'Hazır')
+  setStatus(penal ? 'San Andreas Ceza Kanunu' : lssd ? 'LSSD Intranet' : 'Hazır')
   if (penal && pcSearch) pcSearch.focus()
 }
 
@@ -1842,6 +1862,7 @@ const actions = {
   zoomout: () => { zoom = Math.max(zoom - 0.5, -3); activeView().setZoomLevel(zoom) },
   zoomreset: () => { zoom = 0; activeView().setZoomLevel(0) },
   tabmdc: () => showTab('mdc'),
+  tablssd: () => showTab('lssd'),
   tabpenal: () => showTab('penal'),
   penalsignout: async () => {
     const r = await window.mdt.messageBox({
@@ -2194,10 +2215,11 @@ boot('webview', () => {
 
 function updateNav() {
   try {
+    const v = activeView()
     const back = document.getElementById('btn-back')
     const fwd = document.getElementById('btn-forward')
-    if (back) back.disabled = !wv.canGoBack()
-    if (fwd) fwd.disabled = !wv.canGoForward()
+    if (back) back.disabled = !v.canGoBack()
+    if (fwd) fwd.disabled = !v.canGoForward()
   } catch (_) {
   }
 }
@@ -2359,8 +2381,39 @@ boot('penal', () => {
   })
 })
 
+boot('lssd', () => {
+  if (!lssdView) return
+
+  on(lssdView, 'did-start-loading', () => {
+    if (activeTab === 'lssd') setStatus('LSSD Intranet açılıyor...')
+  })
+
+  on(lssdView, 'did-stop-loading', () => {
+    if (activeTab === 'lssd') setStatus('LSSD Intranet')
+    updateNav()
+  })
+
+  on(lssdView, 'did-fail-load', (e) => {
+    if (e.errorCode === -3) return
+    if (activeTab === 'lssd') setStatus('LSSD Intranet hatası ' + e.errorCode + ': ' + e.errorDescription)
+    playSound('error')
+  })
+
+  on(lssdView, 'did-navigate', updateNav)
+  on(lssdView, 'did-navigate-in-page', updateNav)
+  on(lssdView, 'page-title-updated', (e) => {
+    if (activeTab !== 'lssd') return
+    document.title = APP_NAME
+    setStatus(e.title || 'LSSD Intranet')
+  })
+  on(lssdView, 'new-window', (e) => {
+    if (e && e.url) openPage(e.url)
+  })
+})
+
 boot('tabs', () => {
   on(document.getElementById('tab-mdc'), 'click', () => run('tabmdc'))
+  on(document.getElementById('tab-lssd'), 'click', () => run('tablssd'))
   on(document.getElementById('tab-penal'), 'click', () => run('tabpenal'))
   on(pcSearch, 'input', penalFilter)
   on(el('pc-clear'), 'click', () => {
@@ -2375,6 +2428,9 @@ boot('tabs', () => {
       e.preventDefault()
       run('tabmdc')
     } else if (e.key === '2') {
+      e.preventDefault()
+      run('tablssd')
+    } else if (e.key === '3') {
       e.preventDefault()
       run('tabpenal')
     }
