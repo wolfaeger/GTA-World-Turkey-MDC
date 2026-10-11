@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>PatrolOne Mobil İstemcisi</title>
+<link id="fa-css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="menubar" class="menubar">
+  <div class="menu" data-menu="file"><span class="menu-label">Dosya</span>
+    <div class="menu-popup">
+      <div class="menu-item" data-action="home">MDC Ana Sayfası</div>
+      <div class="menu-item" data-action="reload">Yenile<span class="accel">F5</span></div>
+      <div class="menu-sep"></div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="signout">Oturumu Temizle / Çıkış Yap</div>
+      <div class="menu-item" data-action="exit">Çıkış</div>
+    </div>
+  </div>
+
+  <div class="menu" data-menu="view"><span class="menu-label">Görünüm</span>
+    <div class="menu-popup">
+      <div class="menu-item" data-action="back">Geri<span class="accel">Alt+Left</span></div>
+      <div class="menu-item" data-action="forward">İleri<span class="accel">Alt+Right</span></div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="themelight" id="mi-theme-light">Klasik Açık Tema<span class="accel">F8</span></div>
+      <div class="menu-item" data-action="themedark" id="mi-theme-dark">Klasik Koyu Tema</div>
+      <div class="menu-item" data-action="themelapd" id="mi-theme-lapd">LAPD Mobil Tema</div>
+      <div class="menu-item" data-action="themeaero" id="mi-theme-aero">Windows 7 Aero Teması</div>
+      <div class="menu-item" data-action="themeaerolapd" id="mi-theme-aerolapd">Windows 7 Aero LAPD Teması</div>
+      <div class="menu-item" data-action="themeaerodark" id="mi-theme-aerodark">Windows 7 Aero Koyu Tema</div>
+      <div class="menu-item" data-action="themeoff" id="mi-theme-off">Özgün MDC Teması</div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="zoomin">Yakınlaştır<span class="accel">Ctrl++</span></div>
+      <div class="menu-item" data-action="zoomout">Uzaklaştır<span class="accel">Ctrl+-</span></div>
+      <div class="menu-item" data-action="zoomreset">Gerçek Boyut<span class="accel">Ctrl+0</span></div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="toggletoolbar" id="mi-toolbar">Araç Çubuğu</div>
+      <div class="menu-item" data-action="togglelookup" id="mi-lookup">Sorgu Alanları</div>
+      <div class="menu-item" data-action="toggleaddr" id="mi-addr">Adres Çubuğu</div>
+      <div class="menu-item" data-action="togglestatus" id="mi-status">Durum Çubuğu</div>
+      <div class="menu-item" data-action="togglesidebar" id="mi-sidebar">MDC Yan Paneli<span class="accel">F10</span></div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="tabmdc">Mobil Veri Bilgisayarı<span class="accel">Ctrl+1</span></div>
+      <div class="menu-item" data-action="tabpenal">San Andreas Ceza Kanunu<span class="accel">Ctrl+2</span></div>
+    </div>
+  </div>
+
+  <div class="menu" data-menu="tools"><span class="menu-label">Araçlar</span>
+    <div class="menu-popup">
+      <div class="menu-item" data-action="focusname">İsim Sorgula...<span class="accel">Ctrl+N</span></div>
+      <div class="menu-item" data-action="focusplate">Plaka Sorgula...<span class="accel">Ctrl+L</span></div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="find">Sayfada Bul...<span class="accel">Ctrl+F</span></div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="history">Geçmiş...<span class="accel">Ctrl+H</span></div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="copyurl">Geçerli Adresi Kopyala</div>
+      <div class="menu-item" data-action="devtools">Sayfa Tanılama...</div>
+      <div class="menu-item" data-action="layoutreport">Yerleşim Raporu...</div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="options">Ayarlar...</div>
+    </div>
+  </div>
+
+  <div class="menu" data-menu="help"><span class="menu-label">Yardım</span>
+    <div class="menu-popup">
+      <div class="menu-item" data-action="keyhelp">Klavye Kısayolları...<span class="accel">F1</span></div>
+      <div class="menu-item" data-action="opensite">GTA World Web Sitesi</div>
+      <div class="menu-item" data-action="openrepo">GitHub Proje Sayfası</div>
+      <div class="menu-sep"></div>
+      <div class="menu-item" data-action="checkupdates">Güncellemeleri Denetle...</div>
+      <div class="menu-item" data-action="about">PatrolOne Hakkında</div>
+    </div>
+  </div>
+  <span class="hdrctl hidden" id="hdr-ctl">
+    <button class="hbtn" id="hb-history" title="Geçmişte ara">&#8635; Geçmiş</button>
+    <button class="hbtn" id="hb-bell" title="Bildirimler">&#9993; Uyarılar</button>
+    <button class="hbtn" id="hb-menu" title="Hesap menüsü">&#9776; Menü</button>
+    <div class="hdrpop" id="hdr-popup"></div>
+  </span>
+</div>
+
+<div id="toolbar" class="toolbar">
+  <button class="tbtn" id="btn-back" title="Geri">&#9664;</button>
+  <button class="tbtn" id="btn-forward" title="İleri">&#9654;</button>
+  <button class="tbtn" id="btn-refresh" title="Yenile">&#8635;</button>
+  <button class="tbtn" id="btn-stop" title="Durdur">&#10006;</button>
+  <span class="tsep"></span>
+  <button class="tbtn" id="btn-home" title="MDC Ana Sayfası">&#8962;</button>
+  <span class="tsep"></span>
+  <button class="tbtn tbtn-text" id="btn-namecheck" title="Kayıtlarda isim sorgula (Ctrl+N)"><span class="tico">&#9786;</span> İsim</button>
+  <button class="tbtn tbtn-text" id="btn-platecheck" title="Motorlu Taşıtlar Dairesinde plaka sorgula (Ctrl+L)"><span class="tico">&#9740;</span> Plaka</button>
+  <button class="tbtn tbtn-text" id="btn-history" title="Geçmişte ara (Ctrl+H)"><span class="tico">&#8635;</span> Geçmiş</button>
+  <button class="tbtn tbtn-text" id="btn-newpage" title="Yeni sayfa aç (Ctrl+T)"><span class="tico">&#43;</span> Sayfa</button>
+  <span class="tsep"></span>
+  <button class="tbtn tbtn-text" id="btn-sidebar" title="MDC yan panelini göster/gizle (F10)">Yan Panel</button>
+  <button class="tbtn" id="btn-settings" title="Ayarlar">&#9881;</button>
+  <span class="lookup-group hidden" id="lookup-group">
+    <span class="tsep"></span>
+    <label class="fld-label" for="q-name">İsim:</label>
+    <input type="text" id="q-name" class="fld" size="18" placeholder="Ad Soyad">
+    <button class="btn-sm" id="go-name">Sorgula</button>
+    <label class="fld-label" for="q-plate">Plaka:</label>
+    <input type="text" id="q-plate" class="fld fld-plate" size="9" placeholder="ULX103">
+    <button class="btn-sm" id="go-plate">Sorgula</button>
+  </span>
+  <span class="addr-group hidden" id="addr-group">
+    <span class="tsep"></span>
+    <span class="fld-label">Adres:</span>
+    <input type="text" id="address" class="addr" readonly value="https://mdc-tr.gta.world/">
+  </span>
+  <span class="tspacer"></span>
+</div>
+
+<div id="findbar" class="findbar hidden">
+  <label class="fld-label" for="find-input">Aranacak:</label>
+  <input type="text" id="find-input" class="fld" size="24">
+  <button class="btn-sm" id="find-prev" title="Öncekini Bul">Önceki</button>
+  <button class="btn-sm" id="find-next" title="Sonrakini Bul">Sonraki</button>
+  <label class="fld-check"><input type="checkbox" id="find-case"> Büyük/küçük harf duyarlı</label>
+  <span class="find-count" id="find-count"></span>
+  <span class="tspacer"></span>
+  <button class="btn-sm" id="find-close" title="Kapat">Kapat</button>
+</div>
+
+<div id="tabs" class="tabs">
+  <button class="tab active" id="tab-mdc" title="Mobil Veri Bilgisayarı (Ctrl+1)">Mobil Veri Bilgisayarı</button>
+  <button class="tab" id="tab-penal" title="San Andreas Ceza Kanunu (Ctrl+2)">Ceza Kanunu</button>
+  <span id="tab-nav" class="tabnav hidden"></span>
+</div>
+
+<div id="page-bar" class="pagebar"></div>
+
+<div id="quick-bar" class="quickbar hidden"></div>
+
+<div id="pc-bar" class="pcbar hidden">
+  <label class="fld-label" for="pc-search">Ceza kanununda ara:</label>
+  <input type="text" id="pc-search" class="fld" size="32" placeholder="Suç, bölüm veya madde">
+  <button class="btn-sm" id="pc-clear" title="Tüm maddeleri göster">Temizle</button>
+  <span class="tspacer"></span>
+  <button class="btn-sm" id="pc-signout" title="GTA World forumlarından çıkış yap">Forum Oturumunu Kapat</button>
+</div>
+
+<div class="content">
+  <webview
+    id="mdc"
+    src="https://mdc-tr.gta.world/"
+    partition="persist:gtaw-mdc"
+    preload="../webview-preload.js"
+    allowpopups>
+  </webview>
+  <webview
+    id="penal"
+    src="about:blank"
+    partition="persist:gtaw-mdc"
+    preload="../forum-preload.js"
+    class="wv-off"
+    allowpopups>
+  </webview>
+</div>
+
+<div id="statusbar" class="statusbar">
+  <div class="sb-cell sb-grow" id="sb-status">Hazır</div>
+  <div class="sb-cell" id="sb-theme">Tema: Klasik Açık</div>
+  <div class="sb-cell" id="sb-clock">--:--:--</div>
+</div>
+
+<div id="modal-backdrop" class="modal-backdrop hidden">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span id="dialog-title-text">Ayarlar</span>
+      <button class="dialog-close" id="dialog-close">&#10006;</button>
+    </div>
+    <div class="dialog-body" id="dialog-body"></div>
+    <div class="dialog-buttons">
+      <button class="btn" id="dialog-ok">Tamam</button>
+    </div>
+  </div>
+</div>
+
+<script src="renderer.js"></script>
+</body>
+</html>
