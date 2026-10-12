@@ -215,7 +215,7 @@ const PENAL_URL = 'https://forum-tr.gta.world/index.php?/topic/77-san-andreas-ce
 const LSSD_URL = 'https://lssdportal.online/login'
 const LSSD_FORUM_URL = 'https://lssd-tr.gta.world/index.php'
 
-const APP_NAME = 'Mobile Data Computer - GTA World TR'
+const APP_NAME = 'Mobile Data Computer Client'
 const REPO_URL = 'https://github.com/wolfaeger/GTA-World-Turkey-MDC'
 
 const SKIN_CLASSES = ['dark', 'lapd', 'lssd', 'aero', 'aerolapd', 'aerodark', 'off']
