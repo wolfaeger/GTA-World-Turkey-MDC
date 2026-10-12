@@ -20,6 +20,7 @@ function boot(label, fn) {
 
 let wv = el('mdc')
 const pcv = el('penal')
+const penalBackupView = el('penal-backup')
 const lssdView = el('lssd')
 const lssdForumView = el('lssd-forum')
 const pcBar = el('pc-bar')
@@ -31,6 +32,7 @@ let activeTab = 'mdc'
 
 function activeView() {
   if (activeTab === 'penal' && pcv) return pcv
+  if (activeTab === 'penal-backup' && penalBackupView) return penalBackupView
   if (activeTab === 'lssd' && lssdView) return lssdView
   if (activeTab === 'forum' && lssdForumView) return lssdForumView
   return wv
@@ -409,7 +411,7 @@ const PRESENCE_BY_KIND = {
 }
 
 function presenceDetails() {
-  if (activeTab === 'penal') return 'Ceza kanununa bakıyor'
+  if (activeTab === 'penal' || activeTab === 'penal-backup') return 'Ceza kanununa bakıyor'
   if (activeTab === 'lssd') return 'LSSD Intranet kullanıyor'
   if (activeTab === 'forum') return 'LSSD Forumunu kullanıyor'
   const page = findPage(activePageId)
@@ -506,6 +508,10 @@ function applySkin() {
   })
   try {
     if (pcv) pcv.send('mdt:set-skin', view.theme)
+  } catch (_) {
+  }
+  try {
+    if (penalBackupView) penalBackupView.send('mdt:set-skin', view.theme)
   } catch (_) {
   }
 }
@@ -1447,20 +1453,16 @@ function showOptions() {
   })
 }
 
-function applyPenalSkin() {
-  if (!pcv || !pcv.send) return
-  try {
-    pcv.send('mdt:set-skin', view.theme)
-  } catch (_) {
-  }
-}
-
 function penalFilter() {
-  if (!pcv || !pcv.send) return
-  try {
-    pcv.send('mdt:penal-filter', pcSearch ? String(pcSearch.value || '') : '')
-  } catch (_) {
-  }
+  const query = pcSearch ? String(pcSearch.value || '') : ''
+  const views = [pcv, penalBackupView]
+  views.forEach((webview) => {
+    if (!webview || !webview.send) return
+    try {
+      webview.send('mdt:penal-filter', query)
+    } catch (_) {
+    }
+  })
 }
 
 const NAV_ICONS = [
@@ -1547,6 +1549,60 @@ const QUICK_BUTTONS = [
   { icon: 'c6.png', label: 'Code 6', match: /vehicle map|araç haritası/i, url: HOME + 'map/vehicles' },
   { icon: 'calls.png', label: 'Çağrılar', match: /incident database|olay veritabanı|olay listesi/i, url: HOME + 'emergency/list' }
 ]
+
+function wirePenalView(webview, tab) {
+  const isActive = () => activeTab === tab
+  const label = tab === 'penal-backup' ? 'Yedek Ceza Kanunu' : 'San Andreas Ceza Kanunu'
+
+  on(webview, 'did-start-loading', () => {
+    if (isActive()) setStatus(label + ' açılıyor...')
+  })
+
+  on(webview, 'did-stop-loading', () => {
+    try {
+      webview.send('mdt:set-skin', view.theme)
+    } catch (_) {
+    }
+    if (isActive()) {
+      setStatus(label)
+      penalFilter()
+    }
+  })
+
+  on(webview, 'did-fail-load', (e) => {
+    if (e.errorCode === -3) return
+    if (isActive()) setStatus(label + ' hatası ' + e.errorCode + ': ' + e.errorDescription)
+    playSound('error')
+  })
+
+  on(webview, 'ipc-message', (e) => {
+    if (e.channel === 'mdt:sound') {
+      playSound(String((e.args && e.args[0]) || ''))
+      return
+    }
+    if (e.channel === 'mdt:hotkey') {
+      run(String((e.args && e.args[0]) || ''))
+      return
+    }
+    if (!isActive()) return
+    if (e.channel === 'mdt:penal-info') {
+      const info = (e.args && e.args[0]) || {}
+      setStatus(info.signedIn ? 'San Andreas Ceza Kanunu' : 'Forumda oturum açmanız gerekiyor')
+      return
+    }
+    if (e.channel === 'mdt:penal-result') {
+      const r = (e.args && e.args[0]) || {}
+      if (!r.query) setStatus('San Andreas Ceza Kanunu')
+      else setStatus('Ceza kanunu: ' + r.total + ' maddeden ' + r.shown + ' tanesi "' + r.query + '" ile eşleşti')
+    }
+  })
+
+  on(webview, 'found-in-page', (e) => {
+    const r = e.result || {}
+    if (!findCount) return
+    findCount.textContent = r.matches ? (r.activeMatchOrdinal || 0) + ' / ' + r.matches : 'Eşleşme yok'
+  })
+}
 
 function quickTarget(btn) {
   const hit = navItems.find((item) => btn.match.test(item.label))
@@ -1812,8 +1868,9 @@ function setNav(items) {
 }
 
 function showTab(name) {
-  activeTab = ['penal', 'lssd', 'forum'].includes(name) ? name : 'mdc'
+  activeTab = ['penal', 'penal-backup', 'lssd', 'forum'].includes(name) ? name : 'mdc'
   const penal = activeTab === 'penal'
+  const penalBackup = activeTab === 'penal-backup'
   const lssd = activeTab === 'lssd'
   const forum = activeTab === 'forum'
   if (pcv) {
@@ -1823,6 +1880,18 @@ function showTab(name) {
       try {
         pcv.loadURL(PENAL_URL)
       } catch (_) {
+      }
+    }
+  }
+  if (penalBackupView) {
+    penalBackupView.classList.toggle('wv-off', !penalBackup)
+    if (penalBackup && penalBackupView.getAttribute('data-loaded') !== '1') {
+      penalBackupView.setAttribute('data-loaded', '1')
+      try {
+        penalBackupView.loadURL(PENAL_URL)
+      } catch (err) {
+        console.error('[shell] failed to load backup penal page', err)
+        setStatus('Yedek Ceza Kanunu açılamadı')
       }
     }
   }
@@ -1854,15 +1923,17 @@ function showTab(name) {
     if (v) v.classList.toggle('wv-off', activeTab !== 'mdc' || v !== wv)
   })
   renderPageBar()
-  if (pcBar) pcBar.classList.toggle('hidden', !penal)
+  if (pcBar) pcBar.classList.toggle('hidden', !penal && !penalBackup)
   const tabMdc = document.getElementById('tab-mdc')
   const tabLssd = document.getElementById('tab-lssd')
   const tabForum = document.getElementById('tab-forum')
   const tabPenal = document.getElementById('tab-penal')
+  const tabPenalBackup = document.getElementById('tab-penal-backup')
   if (tabMdc) tabMdc.classList.toggle('active', activeTab === 'mdc')
   if (tabLssd) tabLssd.classList.toggle('active', lssd)
   if (tabForum) tabForum.classList.toggle('active', forum)
   if (tabPenal) tabPenal.classList.toggle('active', penal)
+  if (tabPenalBackup) tabPenalBackup.classList.toggle('active', penalBackup)
   if (address) {
     try {
       address.value = activeView().getURL()
@@ -1872,8 +1943,8 @@ function showTab(name) {
   }
   updateNav()
   document.dispatchEvent(new Event('mdc:chrome-changed'))
-  setStatus(penal ? 'San Andreas Ceza Kanunu' : lssd ? 'LSSD Intranet' : forum ? 'LSSD Forum' : 'Hazır')
-  if (penal && pcSearch) pcSearch.focus()
+  setStatus(penal || penalBackup ? 'San Andreas Ceza Kanunu' : lssd ? 'LSSD Intranet' : forum ? 'LSSD Forum' : 'Hazır')
+  if ((penal || penalBackup) && pcSearch) pcSearch.focus()
 }
 
 const actions = {
@@ -1891,6 +1962,7 @@ const actions = {
   tablssd: () => showTab('lssd'),
   tabforum: () => showTab('forum'),
   tabpenal: () => showTab('penal'),
+  tabpenalbackup: () => showTab('penal-backup'),
   penalsignout: async () => {
     const r = await window.mdt.messageBox({
       type: 'warning',
@@ -1904,12 +1976,14 @@ const actions = {
     if (r === 0) {
       await window.mdt.clearForumSession()
       setStatus('Forum oturumu temizlendi')
-      if (pcv) {
+      const views = [pcv, penalBackupView]
+      views.forEach((view) => {
+        if (!view || view.getAttribute('data-loaded') !== '1') return
         try {
-          pcv.loadURL(PENAL_URL)
+          view.loadURL(PENAL_URL)
         } catch (_) {
         }
-      }
+      })
     }
   },
   themelight: () => setTheme('light'),
@@ -2366,46 +2440,12 @@ boot('init', () => {
 boot('penal', () => {
   if (!pcv) return
 
-  on(pcv, 'did-start-loading', () => setStatus('Ceza kanunu açılıyor...'))
+  wirePenalView(pcv, 'penal')
+})
 
-  on(pcv, 'did-stop-loading', () => {
-    applyPenalSkin()
-    penalFilter()
-  })
-
-  on(pcv, 'did-fail-load', (e) => {
-    if (e.errorCode === -3) return
-    setStatus('Ceza kanunu hatası ' + e.errorCode + ': ' + e.errorDescription)
-    playSound('error')
-  })
-
-  on(pcv, 'ipc-message', (e) => {
-    if (e.channel === 'mdt:sound') {
-      playSound(String((e.args && e.args[0]) || ''))
-      return
-    }
-    if (e.channel === 'mdt:hotkey') {
-      run(String((e.args && e.args[0]) || ''))
-      return
-    }
-    if (e.channel === 'mdt:penal-info') {
-      const info = (e.args && e.args[0]) || {}
-      if (activeTab !== 'penal') return
-      setStatus(info.signedIn ? 'San Andreas Ceza Kanunu' : 'Forumda oturum açmanız gerekiyor')
-      return
-    }
-    if (e.channel === 'mdt:penal-result') {
-      const r = (e.args && e.args[0]) || {}
-      if (!r.query) setStatus('San Andreas Ceza Kanunu')
-      else setStatus('Ceza kanunu: ' + r.total + ' maddeden ' + r.shown + ' tanesi "' + r.query + '" ile eşleşti')
-    }
-  })
-
-  on(pcv, 'found-in-page', (e) => {
-    const r = e.result || {}
-    if (!findCount) return
-    findCount.textContent = r.matches ? (r.activeMatchOrdinal || 0) + ' / ' + r.matches : 'Eşleşme yok'
-  })
+boot('penal-backup', () => {
+  if (!penalBackupView) return
+  wirePenalView(penalBackupView, 'penal-backup')
 })
 
 boot('lssd', () => {
@@ -2473,6 +2513,7 @@ boot('tabs', () => {
   on(document.getElementById('tab-lssd'), 'click', () => run('tablssd'))
   on(document.getElementById('tab-forum'), 'click', () => run('tabforum'))
   on(document.getElementById('tab-penal'), 'click', () => run('tabpenal'))
+  on(document.getElementById('tab-penal-backup'), 'click', () => run('tabpenalbackup'))
   on(pcSearch, 'input', penalFilter)
   on(el('pc-clear'), 'click', () => {
     if (pcSearch) pcSearch.value = ''
@@ -2494,6 +2535,9 @@ boot('tabs', () => {
     } else if (e.key === '4') {
       e.preventDefault()
       run('tabpenal')
+    } else if (e.key === '5') {
+      e.preventDefault()
+      run('tabpenalbackup')
     }
   })
 })

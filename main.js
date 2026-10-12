@@ -435,14 +435,14 @@ ipcMain.handle('app:clearSession', async () => {
 })
 
 ipcMain.handle('app:clearForumSession', async () => {
-  const ses = session.fromPartition(PENAL_PARTITION)
-  const cookies = await ses.cookies.get({ domain: 'forum-tr.gta.world' })
-  for (const cookie of cookies) {
-    const host = String(cookie.domain || '').replace(/^\./, '')
-    const url = (cookie.secure ? 'https://' : 'http://') + host + (cookie.path || '/')
-    try {
+  const partitions = [PARTITION, PENAL_PARTITION]
+  for (const partition of partitions) {
+    const ses = session.fromPartition(partition)
+    const cookies = await ses.cookies.get({ domain: 'forum-tr.gta.world' })
+    for (const cookie of cookies) {
+      const host = String(cookie.domain || '').replace(/^\./, '')
+      const url = (cookie.secure ? 'https://' : 'http://') + host + (cookie.path || '/')
       await ses.cookies.remove(url, cookie.name)
-    } catch (_) {
     }
   }
   return true

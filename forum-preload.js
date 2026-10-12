@@ -370,6 +370,7 @@ function clearHits() {
 
 function filterPenal(query) {
   lastQuery = String(query || '')
+  if (!isTopicPage()) return
   const term = lastQuery.trim().toLowerCase()
   const nodes = sections()
   clearHits()

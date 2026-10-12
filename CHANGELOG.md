@@ -1,5 +1,10 @@
 # Sürüm Notları
 
+## 1.0.10
+
+### Ceza Kanunu
+- Ceza Kanunu (Yedek) sekmesi geri eklendi. İki Ceza Kanunu sekmesinde de sade görünüm, madde araması, eşleşme sayacı ve forum oturumunu kapatma düğmesi bulunur; yedek ayrı oturum deposu kullanır.
+
 ## 1.0.9
 
 ### Ceza Kanunu
