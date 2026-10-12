@@ -4,6 +4,7 @@
 
 ### Uygulama altyapısı
 - Electron, Chromium 152 tabanlı 44.7.0 sürümüne yükseltildi. Release build'i Node.js 22 ile oluşturulur.
+- Ana Ceza Kanunu görünümüne alternatif olarak aynı resmi konuyu temiz, ayrı bir webview oturumunda ve Ceza Kanunu'na özel ön yükleme olmadan açan yedek sekme eklendi.
 
 ## 1.0.0
 
