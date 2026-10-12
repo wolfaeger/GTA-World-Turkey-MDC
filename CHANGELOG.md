@@ -21,7 +21,7 @@ GTA World TR için ilk herkese açık sürüm. Önceki geliştirme sürümlerind
 - Font Awesome'a erişilemezse çubuk boş kalmasın diye istemci otomatik olarak yerleşik simge karakterlerine geçiyor.
 
 ### Temalar
-- Yeni **LSSD Mobil** teması eklendi. LAPD Mobil ile aynı yerleşimi kullanır; istemci arayüzü, MDC ve ceza kanunu sekmesi koyu yeşil zemin ve altın vurgularla gösterilir. Görünüm menüsünden, Araçlar > Ayarlar bölümünden ya da F8 ile temalar arasında geçerek seçilebilir.
+- Yeni **LSSD Mobil** teması eklendi. LSPD Mobil ile aynı yerleşimi kullanır; istemci arayüzü, MDC ve ceza kanunu sekmesi koyu yeşil zemin ve altın vurgularla gösterilir. Görünüm menüsünden, Araçlar > Ayarlar bölümünden ya da F8 ile temalar arasında geçerek seçilebilir.
 - Başarı, uyarı ve tehlike renkleri LSSD temasında da korunur; bağlantılar ve seçili öğe kenarlıkları altın rengindedir.
 - Windows 7 temaları artık orta noktada belirgin parlaklık geçişi olan, iki tonlu özgün Aero parlaklığını kullanıyor. Paneller, başlıklar, düğmeler ve pencere başlık çubukları gerçek Aero cam görünümüne daha yakın.
 
@@ -117,7 +117,7 @@ Pencereler
 
 - Olay oluşturma ve diğer MDC form sayfaları artık sitenin kendi dikey yerleşimini koruyor. Etiketler tek satıra sıkıştırılmak yerine tam genişlikli alanlarının üzerinde duruyor; bu sayfalarda istemcinin düğme ve sütunları sıkıştıran düzeni devre dışı.
 - Araç plakalarında MDC'nin kendi işaretlemesi korunuyor. Kırmızı San Andreas başlığı, iki kırmızı sekme ve lacivert plaka numarası web MDC'deki gibi görüntüleniyor; istemci artık üzerlerine ikinci bir plaka çizmiyor.
-- MDC'nin beyaz olarak işaretlediği panel ve kartlar beyaz kalmak yerine etkin temayı izliyor. Böylece Windows 7 Aero LAPD temasında Olay Veritabanı sayfasındaki Birim Ara kutusu da düzeldi.
+- MDC'nin beyaz olarak işaretlediği panel ve kartlar beyaz kalmak yerine etkin temayı izliyor. Böylece Windows 7 Aero LSPD temasında Olay Veritabanı sayfasındaki Birim Ara kutusu da düzeldi.
 - Araç plakaları, DMV araç kaydında gösterilen plaka dahil her yerde MDC'nin kendi tasarımını kullanıyor; DMV kaydıyla olay formunda aynı plaka görünür.
 - Fotoğraf Yükle penceresindeki kırpma ve boyutlandırma aracı düzgün görüntüleniyor. Resim, kırpma çerçevesi, tutamaçları ve canlı önizleme web MDC'deki gibi görüntülenip taşınabiliyor ve boyutlandırılabiliyor.
 - Araç Haritası'ndaki sokak araması sonuçları artık haritanın ve arama kutusunun üzerine düz metin çizmek yerine kutunun altında, okunaklı ve düz bir arka planla açılıyor.
@@ -143,10 +143,10 @@ Büyük bir güncelleme. İstemci yeni bir tema motoruyla yeniden oluşturuldu; 
 
 ### Temalar
 
-- İstemciyle birlikte yedi tema gelir: Klasik Açık, Klasik Koyu, LAPD Mobil, Windows 7 Aero, Windows 7 Aero LAPD, Windows 7 Aero Koyu ve tüm stilleri kapatan Özgün MDC. Yedisi de Ayarlar > Görünüm bölümünde listelenir; F8, Ceza Kanunu sekmesi dahil her yerden temalar arasında geçiş yapar.
+- İstemciyle birlikte yedi tema gelir: Klasik Açık, Klasik Koyu, LSPD Mobil, Windows 7 Aero, Windows 7 Aero LSPD, Windows 7 Aero Koyu ve tüm stilleri kapatan Özgün MDC. Yedisi de Ayarlar > Görünüm bölümünde listelenir; F8, Ceza Kanunu sekmesi dahil her yerden temalar arasında geçiş yapar.
 - Üç Windows 7 teması yalnızca renk değiştirmek yerine gerçek Aero görünümüyle baştan oluşturuldu: cam geçişleri, ince kenarlıklar ve panellerde iç vurgular, kabartmalı başlıklar, geçişli pencere başlık çubukları, üzerine gelme ve basılma durumları ayrışan metal düğmeler ve geçişli tutamaçlara sahip 17 piksel kaydırma çubukları. Temalar istemci arayüzünü, MDC'yi, Ceza Kanunu sekmesini ve açılır pencereleri değiştirir.
-- Windows 7 Aero LAPD, lacivert metal paleti her yerde kullanır. Böylece düğmeler, açılır menüler, arama alanları ve daraltma anahtarları arayüzle eşleşir; lacivert üzerinde beyaza yakın Aero metali görünmez.
-- LAPD Mobil; ana sayfa, tablolar, durum etiketleri ve sayfa başlığı dahil tüm istemciyi devriye laciverdine boyar.
+- Windows 7 Aero LSPD, lacivert metal paleti her yerde kullanır. Böylece düğmeler, açılır menüler, arama alanları ve daraltma anahtarları arayüzle eşleşir; lacivert üzerinde beyaza yakın Aero metali görünmez.
+- LSPD Mobil; ana sayfa, tablolar, durum etiketleri ve sayfa başlığı dahil tüm istemciyi devriye laciverdine boyar.
 - Temalar sayfa çizilmeden önce uygulanır; sayfa değiştirirken stilsiz sitenin kısa süre görünmesi engellenir.
 - Özel tema etkinken sitenin gündüz modu ve diğer tema kontrolleri gizlenir; bunlar özel temayla çakışır.
 

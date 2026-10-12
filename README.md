@@ -163,10 +163,10 @@ yapmanız gerekmez. Tamamen çıkış yapmak için klasörü kendiniz silin.
 | --- | --- |
 | Klasik Açık | Gri paneller, köşeli görünüm; varsayılan tema |
 | Klasik Koyu | Aynı düzen, koyu renk paleti |
-| LAPD Mobil | İstemciye, MDC'ye ve ceza kanunu sekmesine PremierOne laciverti uygulanır |
+| LSPD Mobil | İstemciye, MDC'ye ve ceza kanunu sekmesine PremierOne laciverti uygulanır |
 | LSSD Mobil          | İstemciye, MDC'ye ve ceza kanunu sekmesine koyu yeşil ve altın vurgular uygulanır |
 | Windows 7 Aero | Cam efektleri, yuvarlatılmış paneller, mavi odak parıltıları ve açık vurgular |
-| Windows 7 Aero LAPD | Windows 7 cam efektleri altında lacivert tema |
+| Windows 7 Aero LSPD | Windows 7 cam efektleri altında lacivert tema |
 | Windows 7 Aero Koyu | Gece kullanımı için grafit cam görünümü |
 | Özgün MDC | Ek stil uygulanmaz; site özgün görünümüyle açılır |
 
@@ -420,7 +420,7 @@ davranışlar burada kayıtlıdır.
 
 **Tema başlangıcı.** Her sayfa etkin temasını kendi yerel depolama alanında tutar
 ve site çizilmeden önce bu temayı uygular. Yükleyici tüm tema adlarını kabul
-etmelidir. Yalnızca `light`, `dark` ve `off` kabul edildiği dönemde Aero veya LAPD
+etmelidir. Yalnızca `light`, `dark` ve `off` kabul edildiği dönemde Aero veya LSPD
 sayfaları önce Klasik Açık temayla açılıyor, bir saniye sonra düzeliyordu; eski
 görselin kısa süre parlamasının nedeni buydu. Cam katmanı da aynı ilk geçişte
 uygulanır.

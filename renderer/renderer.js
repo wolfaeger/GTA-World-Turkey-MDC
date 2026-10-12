@@ -219,10 +219,10 @@ const SKIN_CLASSES = ['dark', 'lapd', 'lssd', 'aero', 'aerolapd', 'aerodark', 'o
 const THEMES = {
   light: 'Klasik Açık',
   dark: 'Klasik Koyu',
-  lapd: 'LAPD Mobil',
+  lapd: 'LSPD Mobil',
   lssd: 'LSSD Mobil',
   aero: 'Windows 7 Aero',
-  aerolapd: 'Windows 7 Aero LAPD',
+  aerolapd: 'Windows 7 Aero LSPD',
   aerodark: 'Windows 7 Aero Koyu',
   off: 'Özgün MDC'
 }
@@ -362,10 +362,10 @@ const CHECKABLE = [
 const THEME_ITEMS = [
   { id: 'mi-theme-light', theme: 'light', label: 'Klasik Açık Tema', accel: 'F8' },
   { id: 'mi-theme-dark', theme: 'dark', label: 'Klasik Koyu Tema', accel: '' },
-  { id: 'mi-theme-lapd', theme: 'lapd', label: 'LAPD Mobil Tema', accel: '' },
+  { id: 'mi-theme-lapd', theme: 'lapd', label: 'LSPD Mobil Tema', accel: '' },
   { id: 'mi-theme-lssd', theme: 'lssd', label: 'LSSD Mobil Tema', accel: '' },
   { id: 'mi-theme-aero', theme: 'aero', label: 'Windows 7 Aero Teması', accel: '' },
-  { id: 'mi-theme-aerolapd', theme: 'aerolapd', label: 'Windows 7 Aero LAPD Teması', accel: '' },
+  { id: 'mi-theme-aerolapd', theme: 'aerolapd', label: 'Windows 7 Aero LSPD Teması', accel: '' },
   { id: 'mi-theme-aerodark', theme: 'aerodark', label: 'Windows 7 Aero Koyu Tema', accel: '' },
   { id: 'mi-theme-off', theme: 'off', label: 'Özgün MDC Teması', accel: '' }
 ]
@@ -1376,7 +1376,7 @@ function showOptions() {
     radio('aerolapd') + radio('aerodark') + radio('off') +
     '<p class="opt-note">F8 temalar arasında geçiş yapar. Üç Windows 7 Aero teması istemciye, ' +
     'MDC’ye ve açılır pencerelere Windows 7 döneminin cam efektlerini ve mavi vurgularını uygular. ' +
-    'LAPD Mobil, MDC’yi, ceza kanunu sekmesini ve istemci arayüzünü devriye renklerine dönüştürür; ' +
+    'LSPD Mobil, MDC’yi, ceza kanunu sekmesini ve istemci arayüzünü devriye renklerine dönüştürür; ' +
     'LSSD Mobil aynısını koyu yeşil ve altın tonlarıyla yapar.</p>' +
     '</fieldset>' +
     '<fieldset class="opt-group"><legend>Hızlı Kısayollar</legend>' +
