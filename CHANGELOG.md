@@ -3,7 +3,7 @@
 ## 1.0.11
 
 ### Ceza Kanunu
-- Yedek sekme ilk çalışan sürümdeki gibi forum ön yüklemesi olmadan açılır; arama kutusu yine maddeleri filtreler ve sonuç sayısını durum çubuğunda gösterir.
+- Resmî Ceza Kanunu konusu, özel ön yükleme olmadan ve bağımsız oturum deposunda açılan bir yedek sekme olarak eklendi. Yedek sekme de arama ve eşleşme sayısını destekler.
 
 ## 1.0.10
 
