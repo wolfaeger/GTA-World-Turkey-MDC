@@ -21,6 +21,7 @@ function boot(label, fn) {
 let wv = el('mdc')
 const pcv = el('penal')
 const lssdView = el('lssd')
+const lssdForumView = el('lssd-forum')
 const pcBar = el('pc-bar')
 const pcSearch = el('pc-search')
 const tabNav = el('tab-nav')
@@ -31,6 +32,7 @@ let activeTab = 'mdc'
 function activeView() {
   if (activeTab === 'penal' && pcv) return pcv
   if (activeTab === 'lssd' && lssdView) return lssdView
+  if (activeTab === 'forum' && lssdForumView) return lssdForumView
   return wv
 }
 
@@ -207,6 +209,7 @@ const RECORD_URL = 'https://mdc-tr.gta.world/record/'
 const DMV_URL = 'https://mdc-tr.gta.world/dmv/'
 const PENAL_URL = 'https://forum-tr.gta.world/index.php?/topic/77-san-andreas-ceza-kanunu/'
 const LSSD_URL = 'https://lssdportal.online/login'
+const LSSD_FORUM_URL = 'https://lssd-tr.gta.world/index.php'
 
 const APP_NAME = 'Mobile Data Computer - GTA World TR'
 const REPO_URL = 'https://github.com/wolfaeger/GTA-World-Turkey-MDC'
@@ -408,6 +411,7 @@ const PRESENCE_BY_KIND = {
 function presenceDetails() {
   if (activeTab === 'penal') return 'Ceza kanununa bakıyor'
   if (activeTab === 'lssd') return 'LSSD Intranet kullanıyor'
+  if (activeTab === 'forum') return 'LSSD Forumunu kullanıyor'
   const page = findPage(activePageId)
   const kind = page ? histKind(page.url) : ''
   return PRESENCE_BY_KIND[kind] || 'MDC kullanıyor'
@@ -1808,9 +1812,10 @@ function setNav(items) {
 }
 
 function showTab(name) {
-  activeTab = name === 'penal' || name === 'lssd' ? name : 'mdc'
+  activeTab = ['penal', 'lssd', 'forum'].includes(name) ? name : 'mdc'
   const penal = activeTab === 'penal'
   const lssd = activeTab === 'lssd'
+  const forum = activeTab === 'forum'
   if (pcv) {
     pcv.classList.toggle('wv-off', !penal)
     if (penal && pcv.getAttribute('data-loaded') !== '1') {
@@ -1832,6 +1837,18 @@ function showTab(name) {
         setStatus('LSSD Intranet açılamadı')
       }
     }
+    if (lssdForumView) {
+      lssdForumView.classList.toggle('wv-off', !forum)
+      if (forum && lssdForumView.getAttribute('data-loaded') !== '1') {
+        lssdForumView.setAttribute('data-loaded', '1')
+        try {
+          lssdForumView.loadURL(LSSD_FORUM_URL)
+        } catch (err) {
+          console.error('[shell] failed to load LSSD Forum', err)
+          setStatus('LSSD Forum açılamadı')
+        }
+      }
+    }
   }
   allPageViews().forEach((v) => {
     if (v) v.classList.toggle('wv-off', activeTab !== 'mdc' || v !== wv)
@@ -1840,13 +1857,22 @@ function showTab(name) {
   if (pcBar) pcBar.classList.toggle('hidden', !penal)
   const tabMdc = document.getElementById('tab-mdc')
   const tabLssd = document.getElementById('tab-lssd')
+  const tabForum = document.getElementById('tab-forum')
   const tabPenal = document.getElementById('tab-penal')
   if (tabMdc) tabMdc.classList.toggle('active', activeTab === 'mdc')
   if (tabLssd) tabLssd.classList.toggle('active', lssd)
+  if (tabForum) tabForum.classList.toggle('active', forum)
   if (tabPenal) tabPenal.classList.toggle('active', penal)
+  if (address) {
+    try {
+      address.value = activeView().getURL()
+    } catch (_) {
+      address.value = ''
+    }
+  }
   updateNav()
   document.dispatchEvent(new Event('mdc:chrome-changed'))
-  setStatus(penal ? 'San Andreas Ceza Kanunu' : lssd ? 'LSSD Intranet' : 'Hazır')
+  setStatus(penal ? 'San Andreas Ceza Kanunu' : lssd ? 'LSSD Intranet' : forum ? 'LSSD Forum' : 'Hazır')
   if (penal && pcSearch) pcSearch.focus()
 }
 
@@ -1863,6 +1889,7 @@ const actions = {
   zoomreset: () => { zoom = 0; activeView().setZoomLevel(0) },
   tabmdc: () => showTab('mdc'),
   tablssd: () => showTab('lssd'),
+  tabforum: () => showTab('forum'),
   tabpenal: () => showTab('penal'),
   penalsignout: async () => {
     const r = await window.mdt.messageBox({
@@ -2411,9 +2438,40 @@ boot('lssd', () => {
   })
 })
 
+boot('lssd-forum', () => {
+  if (!lssdForumView) return
+
+  on(lssdForumView, 'did-start-loading', () => {
+    if (activeTab === 'forum') setStatus('LSSD Forum açılıyor...')
+  })
+
+  on(lssdForumView, 'did-stop-loading', () => {
+    if (activeTab === 'forum') setStatus('LSSD Forum')
+    updateNav()
+  })
+
+  on(lssdForumView, 'did-fail-load', (e) => {
+    if (e.errorCode === -3) return
+    if (activeTab === 'forum') setStatus('LSSD Forum hatası ' + e.errorCode + ': ' + e.errorDescription)
+    playSound('error')
+  })
+
+  on(lssdForumView, 'did-navigate', updateNav)
+  on(lssdForumView, 'did-navigate-in-page', updateNav)
+  on(lssdForumView, 'page-title-updated', (e) => {
+    if (activeTab !== 'forum') return
+    document.title = APP_NAME
+    setStatus(e.title || 'LSSD Forum')
+  })
+  on(lssdForumView, 'new-window', (e) => {
+    if (e && e.url) openPage(e.url)
+  })
+})
+
 boot('tabs', () => {
   on(document.getElementById('tab-mdc'), 'click', () => run('tabmdc'))
   on(document.getElementById('tab-lssd'), 'click', () => run('tablssd'))
+  on(document.getElementById('tab-forum'), 'click', () => run('tabforum'))
   on(document.getElementById('tab-penal'), 'click', () => run('tabpenal'))
   on(pcSearch, 'input', penalFilter)
   on(el('pc-clear'), 'click', () => {
@@ -2431,6 +2489,9 @@ boot('tabs', () => {
       e.preventDefault()
       run('tablssd')
     } else if (e.key === '3') {
+      e.preventDefault()
+      run('tabforum')
+    } else if (e.key === '4') {
       e.preventDefault()
       run('tabpenal')
     }

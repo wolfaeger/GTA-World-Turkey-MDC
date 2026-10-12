@@ -207,9 +207,10 @@ dosya adları sabittir.
 
 ### Uygulama sekmeleri
 
-Sayfa alanının üzerinde Mobil Veri Bilgisayarı, LSSD Intranet ve Ceza Kanunu
-sekmeleri bulunur (sırasıyla Ctrl+1, Ctrl+2 ve Ctrl+3; ayrıca Görünüm menüsünde).
-LSSD Intranet sekmesi LSSD Portal giriş sayfasını uygulama içinde açar. Ceza Kanunu sekmesi,
+Sayfa alanının üzerinde MDC, LSSD Intranet, LSSD Forum ve Ceza Kanunu sekmeleri
+bulunur (sırasıyla Ctrl+1, Ctrl+2, Ctrl+3 ve Ctrl+4; ayrıca Görünüm menüsünde).
+LSSD Intranet sekmesi LSSD Portal giriş sayfasını, LSSD Forum sekmesi ise
+<https://lssd-tr.gta.world/index.php> adresini uygulama içinde açar. Ceza Kanunu sekmesi,
 GTA World forumlarındaki San Andreas Ceza Kanunu konusunu yükler ve yalnızca
 kanun metnini bırakır. Forum başlığı, gezinme alanları, içerik yolu, alt bilgi,
 yazar panelleri, gönderi kontrolleri, tepkiler, sayfalama ve profil bağlantıları

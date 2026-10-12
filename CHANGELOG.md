@@ -15,7 +15,7 @@ GTA World TR için ilk herkese açık sürüm. Önceki geliştirme sürümlerind
 - Seçicideki özel renk alanı yeniden doğru bir renk girişi olarak görüntüleniyor.
 
 ### Gezinme
-- Hızlı kısayollardan, ana sayfaya yönlendiren Sevk düğmesi kaldırıldı. Üst sekme sırasına LSSD Intranet eklendi; Ceza Kanunu artık üçüncü sekme.
+- Hızlı kısayollardan, ana sayfaya yönlendiren Sevk düğmesi kaldırıldı. Uygulama sekmeleri MDC, LSSD Intranet, LSSD Forum ve Ceza Kanunu olarak sıralandı.
 - Gezinme çubuğu artık Font Awesome dolu simgelerini ve çok daha geniş bir simge eşlemesini kullanıyor: ana sayfa, kişi sorgusu, APB, evraklar, tutuklama sonrası işlemler, etkin arama emirleri, arama emirleri, acil durum, DMV, haritalar, veritabanları, ceza kanunu, profil, oturumu kapatma ve daha fazlası.
 - Gezinme sekmelerindeki simgeler daha düzgün hizalandı, etkin sekme vurgu çubuğuyla belirginleştirildi ve oturumu kapatma sekmesinin kendine özgü stili korundu.
 - Font Awesome'a erişilemezse çubuk boş kalmasın diye istemci otomatik olarak yerleşik simge karakterlerine geçiyor.
