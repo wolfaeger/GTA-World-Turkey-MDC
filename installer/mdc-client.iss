@@ -1,5 +1,5 @@
 #define AppName "Mobile Data Computer Client"
-#define AppVersion "1.0.0"
+#define AppVersion "1.0.21"
 #define AppPublisher "Mobile Data Computer Client"
 #define AppExe "Mobile Data Computer Client.exe"
 #define SourceDir "..\dist\win-unpacked"

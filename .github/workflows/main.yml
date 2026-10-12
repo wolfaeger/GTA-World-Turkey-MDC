@@ -56,7 +56,7 @@ jobs:
         shell: bash
         run: |
           ls dist/*.exe
-          test -f "dist/Mobile-Data-Computer-GTA-World-TR-Setup-${APP_VERSION}.exe"
+          test -f "dist/Mobile-Data-Computer-Client-Setup-${APP_VERSION}.exe"
 
       - name: Write release notes from CHANGELOG
         shell: bash
