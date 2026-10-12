@@ -512,10 +512,6 @@ function applySkin() {
     if (pcv) pcv.send('mdt:set-skin', view.theme)
   } catch (_) {
   }
-  try {
-    if (penalBackupView) penalBackupView.send('mdt:set-skin', view.theme)
-  } catch (_) {
-  }
 }
 
 function applySidebar() {
@@ -1457,13 +1453,13 @@ function showOptions() {
 
 function penalFilter() {
   const query = pcSearch ? String(pcSearch.value || '') : ''
-  if (pcv && pcv.send) {
+  if (activeTab === 'penal' && pcv && pcv.send) {
     try {
       pcv.send('mdt:penal-filter', query)
     } catch (_) {
     }
   }
-  filterBackupPenal(query)
+  if (activeTab === 'penal-backup') filterBackupPenal(query)
 }
 
 function filterBackupPenal(query) {
@@ -1663,6 +1659,44 @@ function wirePenalView(webview, tab) {
     const r = e.result || {}
     if (!findCount) return
     findCount.textContent = r.matches ? (r.activeMatchOrdinal || 0) + ' / ' + r.matches : 'Eşleşme yok'
+  })
+}
+
+function wireBackupPenalView() {
+  if (!penalBackupView) return
+
+  on(penalBackupView, 'did-start-loading', () => {
+    penalBackupReady = false
+    penalBackupFilterActive = false
+    if (activeTab === 'penal-backup') setStatus('Yedek Ceza Kanunu açılıyor...')
+  })
+
+  on(penalBackupView, 'did-stop-loading', () => {
+    penalBackupReady = true
+    if (activeTab === 'penal-backup') {
+      setStatus('Yedek Ceza Kanunu')
+      penalFilter()
+    }
+    updateNav()
+  })
+
+  on(penalBackupView, 'did-fail-load', (e) => {
+    if (e.errorCode === -3) return
+    if (activeTab === 'penal-backup') {
+      setStatus('Yedek Ceza Kanunu hatası ' + e.errorCode + ': ' + e.errorDescription)
+    }
+    playSound('error')
+  })
+
+  on(penalBackupView, 'did-navigate', updateNav)
+  on(penalBackupView, 'did-navigate-in-page', updateNav)
+  on(penalBackupView, 'page-title-updated', (e) => {
+    if (activeTab !== 'penal-backup') return
+    document.title = APP_NAME
+    setStatus(e.title || 'Yedek Ceza Kanunu')
+  })
+  on(penalBackupView, 'new-window', (e) => {
+    if (e && e.url) openPage(e.url)
   })
 }
 
@@ -2006,7 +2040,10 @@ function showTab(name) {
   updateNav()
   document.dispatchEvent(new Event('mdc:chrome-changed'))
   setStatus(penal || penalBackup ? 'San Andreas Ceza Kanunu' : lssd ? 'LSSD Intranet' : forum ? 'LSSD Forum' : 'Hazır')
-  if ((penal || penalBackup) && pcSearch) pcSearch.focus()
+  if ((penal || penalBackup) && pcSearch) {
+    pcSearch.focus()
+    if (penalBackup) penalFilter()
+  }
 }
 
 const actions = {
@@ -2506,8 +2543,7 @@ boot('penal', () => {
 })
 
 boot('penal-backup', () => {
-  if (!penalBackupView) return
-  wirePenalView(penalBackupView, 'penal-backup')
+  wireBackupPenalView()
 })
 
 boot('lssd', () => {
