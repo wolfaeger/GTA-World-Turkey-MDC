@@ -263,7 +263,7 @@ görüntü alanını ve belge boyutunu, bunların oranını ve görüntü alanı
 öğeleri gösterir. Uygulama kabuğundaki boyutlandırma sorunlarını sayfa
 sorunlarından ayırmanın en hızlı yoludur.
 
----
+
 
 ## 6. Deneyimle öğrenilen kurallar
 
