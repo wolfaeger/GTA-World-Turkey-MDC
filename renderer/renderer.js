@@ -30,6 +30,7 @@ const quickBar = el('quick-bar')
 const hdrCtl = el('hdr-ctl')
 let activeTab = 'mdc'
 let penalBackupReady = false
+let penalBackupFilterActive = false
 
 function activeView() {
   if (activeTab === 'penal' && pcv) return pcv
@@ -1466,7 +1467,9 @@ function penalFilter() {
 }
 
 function filterBackupPenal(query) {
+  const term = String(query || '').trim()
   if (!penalBackupReady || !penalBackupView || !penalBackupView.executeJavaScript) return
+  if (!term && !penalBackupFilterActive) return
   const script = '(' + function (search) {
     const feed = document.getElementById('elPostFeed')
     if (!feed) return { ready: false, shown: 0, total: 0 }
@@ -1499,11 +1502,13 @@ function filterBackupPenal(query) {
     return { ready: true, shown: shown, total: sections.length }
   }.toString() + ')(' + JSON.stringify(query) + ')'
 
+  if (term) penalBackupFilterActive = true
   penalBackupView.executeJavaScript(script).then((result) => {
     if (activeTab !== 'penal-backup' || !pcSearch || pcSearch.value !== query) return
     if (!result || !result.ready) {
       setStatus('Forum doğrulaması tamamlanmadı; kanun maddeleri aranamadı')
     } else if (!query.trim()) {
+      penalBackupFilterActive = false
       setStatus('San Andreas Ceza Kanunu')
     } else {
       setStatus('Ceza kanunu: ' + result.total + ' maddeden ' + result.shown + ' tanesi "' + query + '" ile eşleşti')
@@ -1604,7 +1609,10 @@ function wirePenalView(webview, tab) {
   const label = tab === 'penal-backup' ? 'Yedek Ceza Kanunu' : 'San Andreas Ceza Kanunu'
 
   on(webview, 'did-start-loading', () => {
-    if (tab === 'penal-backup') penalBackupReady = false
+    if (tab === 'penal-backup') {
+      penalBackupReady = false
+      penalBackupFilterActive = false
+    }
     if (isActive()) setStatus(label + ' açılıyor...')
   })
 
