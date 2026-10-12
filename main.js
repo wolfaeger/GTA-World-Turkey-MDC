@@ -33,7 +33,6 @@ try {
 }
 
 const PARTITION = 'persist:gtaw-mdc'
-const PENAL_PARTITION = 'persist:gtaw-penal-backup'
 const MDC_URL = 'https://mdc-tr.gta.world/'
 
 let mainWindow = null
@@ -435,15 +434,12 @@ ipcMain.handle('app:clearSession', async () => {
 })
 
 ipcMain.handle('app:clearForumSession', async () => {
-  const partitions = [PARTITION, PENAL_PARTITION]
-  for (const partition of partitions) {
-    const ses = session.fromPartition(partition)
-    const cookies = await ses.cookies.get({ domain: 'forum-tr.gta.world' })
-    for (const cookie of cookies) {
-      const host = String(cookie.domain || '').replace(/^\./, '')
-      const url = (cookie.secure ? 'https://' : 'http://') + host + (cookie.path || '/')
-      await ses.cookies.remove(url, cookie.name)
-    }
+  const ses = session.fromPartition(PARTITION)
+  const cookies = await ses.cookies.get({ domain: 'forum-tr.gta.world' })
+  for (const cookie of cookies) {
+    const host = String(cookie.domain || '').replace(/^\./, '')
+    const url = (cookie.secure ? 'https://' : 'http://') + host + (cookie.path || '/')
+    await ses.cookies.remove(url, cookie.name)
   }
   return true
 })
