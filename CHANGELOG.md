@@ -1,5 +1,10 @@
 # Sürüm Notları
 
+## 1.0.11
+
+### Ceza Kanunu
+- Yedek sekme ilk çalışan sürümdeki gibi forum ön yüklemesi olmadan açılır; arama kutusu yine maddeleri filtreler ve sonuç sayısını durum çubuğunda gösterir.
+
 ## 1.0.10
 
 ### Ceza Kanunu

@@ -29,6 +29,7 @@ const tabNav = el('tab-nav')
 const quickBar = el('quick-bar')
 const hdrCtl = el('hdr-ctl')
 let activeTab = 'mdc'
+let penalBackupReady = false
 
 function activeView() {
   if (activeTab === 'penal' && pcv) return pcv
@@ -1455,13 +1456,61 @@ function showOptions() {
 
 function penalFilter() {
   const query = pcSearch ? String(pcSearch.value || '') : ''
-  const views = [pcv, penalBackupView]
-  views.forEach((webview) => {
-    if (!webview || !webview.send) return
+  if (pcv && pcv.send) {
     try {
-      webview.send('mdt:penal-filter', query)
+      pcv.send('mdt:penal-filter', query)
     } catch (_) {
     }
+  }
+  filterBackupPenal(query)
+}
+
+function filterBackupPenal(query) {
+  if (!penalBackupReady || !penalBackupView || !penalBackupView.executeJavaScript) return
+  const script = '(' + function (search) {
+    const feed = document.getElementById('elPostFeed')
+    if (!feed) return { ready: false, shown: 0, total: 0 }
+    const term = String(search || '').trim().toLowerCase()
+    const sections = []
+    feed.querySelectorAll('.ipsType_richText').forEach((host) => {
+      Array.prototype.forEach.call(host.children, (child) => {
+        if (child && child.style) sections.push(child)
+      })
+    })
+    let shown = 0
+    sections.forEach((section) => {
+      if (!section.hasAttribute('data-mdt-backup-display')) {
+        section.setAttribute('data-mdt-backup-display', JSON.stringify([
+          section.style.getPropertyValue('display'),
+          section.style.getPropertyPriority('display')
+        ]))
+      }
+      const matches = !term || String(section.textContent || '').toLowerCase().includes(term)
+      if (matches) {
+        const original = JSON.parse(section.getAttribute('data-mdt-backup-display'))
+        if (original[0]) section.style.setProperty('display', original[0], original[1])
+        else section.style.removeProperty('display')
+        if (!term) section.removeAttribute('data-mdt-backup-display')
+        shown++
+      } else {
+        section.style.setProperty('display', 'none', 'important')
+      }
+    })
+    return { ready: true, shown: shown, total: sections.length }
+  }.toString() + ')(' + JSON.stringify(query) + ')'
+
+  penalBackupView.executeJavaScript(script).then((result) => {
+    if (activeTab !== 'penal-backup' || !pcSearch || pcSearch.value !== query) return
+    if (!result || !result.ready) {
+      setStatus('Forum doğrulaması tamamlanmadı; kanun maddeleri aranamadı')
+    } else if (!query.trim()) {
+      setStatus('San Andreas Ceza Kanunu')
+    } else {
+      setStatus('Ceza kanunu: ' + result.total + ' maddeden ' + result.shown + ' tanesi "' + query + '" ile eşleşti')
+    }
+  }).catch((err) => {
+    console.error('[shell] failed to search backup penal page', err)
+    if (activeTab === 'penal-backup') setStatus('Yedek Ceza Kanunu aranamadı')
   })
 }
 
@@ -1555,13 +1604,18 @@ function wirePenalView(webview, tab) {
   const label = tab === 'penal-backup' ? 'Yedek Ceza Kanunu' : 'San Andreas Ceza Kanunu'
 
   on(webview, 'did-start-loading', () => {
+    if (tab === 'penal-backup') penalBackupReady = false
     if (isActive()) setStatus(label + ' açılıyor...')
   })
 
   on(webview, 'did-stop-loading', () => {
-    try {
-      webview.send('mdt:set-skin', view.theme)
-    } catch (_) {
+    if (tab === 'penal-backup') {
+      penalBackupReady = true
+    } else {
+      try {
+        webview.send('mdt:set-skin', view.theme)
+      } catch (_) {
+      }
     }
     if (isActive()) {
       setStatus(label)

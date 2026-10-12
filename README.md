@@ -216,9 +216,10 @@ kanun metnini bırakır. Forum başlığı, gezinme alanları, içerik yolu, alt
 yazar panelleri, gönderi kontrolleri, tepkiler, sayfalama ve profil bağlantıları
 gösterilmez. Başlıklar, tablolar ve alıntılar uygulamanın geri kalanıyla aynı
 temayla yeniden biçimlendirilir; koyu tema burada da geçerlidir. Ceza Kanunu
-(Yedek) aynı görünüm, arama ve oturum kapatma özelliklerini ayrı bir oturum
-deposunda çalıştırır; ilk sekmedeki forum doğrulama/oturum sorunları için
-alternatif olarak kullanılabilir.
+(Yedek) aynı resmi konuyu ayrı bir oturum deposunda, özel forum ön yüklemesi
+ve tema/sadeleştirme kodu olmadan açar. Arama kutusu, sayfa yüklendikten sonra
+kanun maddelerini filtreler ve eşleşme sayısını gösterir; ilk sekmedeki
+doğrulama veya ön yükleme sorunları için alternatif olarak kullanılabilir.
 
 Forumda ayrıca oturum açmanız gerekir; bunu sekmede, tarayıcıda yaptığınız gibi
 yapabilirsiniz. Forum giriş bilgileri saklanmaz. Giriş yapana kadar forum sayfası
