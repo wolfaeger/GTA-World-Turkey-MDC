@@ -214,18 +214,20 @@ LSSD Intranet sekmesi LSSD Portal giriş sayfasını, LSSD Forum sekmesi ise
 GTA World forumlarındaki San Andreas Ceza Kanunu konusunu yükler ve yalnızca
 kanun metnini bırakır. Forum başlığı, gezinme alanları, içerik yolu, alt bilgi,
 yazar panelleri, gönderi kontrolleri, tepkiler, sayfalama ve profil bağlantıları
-gösterilmez. Başlıklar, tablolar ve alıntılar uygulamanın geri kalanıyla aynı
-temayla yeniden biçimlendirilir; koyu tema burada da geçerlidir. Arama kutusu,
-kanun maddelerini filtreler ve eşleşme sayısını gösterir. Ceza Kanunu (Yedek)
-aynı resmî forum konusunu özel ön yükleme olmadan ve ayrı oturum deposunda açar;
-ilk sekme açılamazsa alternatif olarak kullanılabilir. Arama kutusu yedek sekmede
-de konu içeriğini filtreler.
+gösterilmez. Ceza Kanunu (Yedek), uygulamayla birlikte gelen yerel kanun metnini
+koyu temalı başlıklar, madde kartları, renkli (I)/(F)/(M) suç rozetleri, suç türü
+vurguları ve ayrı ceza kutularıyla gösterir; kopyalanmış yazar, tarih ve forum
+arayüzü metaverileri çıkarılmıştır. Başlık VIII'deki suç ortaklığı ve tamamlanmamış
+suçlar ayrı alt başlıklar halinde sunulur.
+Ağ bağlantısı veya forum oturumu gerektirmez. Arama ve temizleme düğmeleri
+yedekte de kullanılabilir ve eşleşen madde sayısını gösterir.
 
 Forumda ayrıca oturum açmanız gerekir; bunu sekmede, tarayıcıda yaptığınız gibi
 yapabilirsiniz. Forum giriş bilgileri saklanmaz. Giriş yapana kadar forum sayfası
 özgün stiliyle gösterilir, böylece giriş formu normal çalışır. Ceza Kanunu
-çubuğundaki Forum Oturumunu Kapat düğmesi her iki Ceza Kanunu sekmesinin forum
-çerezlerini siler; MDC oturumu açık kalır.
+çubuğundaki Forum Oturumunu Kapat düğmesi ana Ceza Kanunu sekmesinin forum
+çerezlerini siler; yedek metin çevrimdışı olduğundan bu düğme yedek sekmede
+gösterilmez. MDC oturumu açık kalır.
 
 Ceza kanunu arama kutusu yazdıkça maddeleri filtreler. Aranan metni içermeyen
 maddeler gizlenir, eşleşmeler vurgulanır ve sonuç sayısı durum çubuğunda

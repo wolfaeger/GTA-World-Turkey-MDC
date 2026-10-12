@@ -1468,42 +1468,15 @@ function filterBackupPenal(query) {
   if (!term && !penalBackupFilterActive) return
 
   const script = '(' + function (search) {
-    const feed = document.getElementById('elPostFeed')
-    if (!feed) return { ready: false, shown: 0, total: 0 }
-    const term = String(search || '').trim().toLowerCase()
-    const sections = []
-    feed.querySelectorAll('.ipsType_richText').forEach((host) => {
-      Array.prototype.forEach.call(host.children, (child) => {
-        if (child && child.style) sections.push(child)
-      })
-    })
-    let shown = 0
-    sections.forEach((section) => {
-      if (!section.hasAttribute('data-mdt-backup-display')) {
-        section.setAttribute('data-mdt-backup-display', JSON.stringify([
-          section.style.getPropertyValue('display'),
-          section.style.getPropertyPriority('display')
-        ]))
-      }
-      const matches = !term || String(section.textContent || '').toLowerCase().includes(term)
-      if (matches) {
-        const original = JSON.parse(section.getAttribute('data-mdt-backup-display'))
-        if (original[0]) section.style.setProperty('display', original[0], original[1])
-        else section.style.removeProperty('display')
-        if (!term) section.removeAttribute('data-mdt-backup-display')
-        shown++
-      } else {
-        section.style.setProperty('display', 'none', 'important')
-      }
-    })
-    return { ready: true, shown: shown, total: sections.length }
+    if (typeof window.mdtFilterLaw !== 'function') return { ready: false, shown: 0, total: 0 }
+    return window.mdtFilterLaw(search)
   }.toString() + ')(' + JSON.stringify(query) + ')'
 
   if (term) penalBackupFilterActive = true
   penalBackupView.executeJavaScript(script).then((result) => {
     if (activeTab !== 'penal-backup' || !pcSearch || pcSearch.value !== query) return
     if (!result || !result.ready) {
-      setStatus('Yedek Ceza Kanunu araması için konu yüklenemedi')
+      setStatus('Yedek Ceza Kanunu metni aranamadı')
     } else if (!term) {
       penalBackupFilterActive = false
       setStatus('Yedek Ceza Kanunu')
@@ -1974,15 +1947,7 @@ function showTab(name) {
   }
   if (penalBackupView) {
     penalBackupView.classList.toggle('wv-off', !penalBackup)
-    if (penalBackup && penalBackupView.getAttribute('data-loaded') !== '1') {
-      penalBackupView.setAttribute('data-loaded', '1')
-      try {
-        penalBackupView.loadURL(PENAL_URL)
-      } catch (err) {
-        console.error('[shell] failed to load backup penal page', err)
-        setStatus('Yedek Ceza Kanunu açılamadı')
-      }
-    }
+    if (penalBackup) penalBackupView.setAttribute('data-loaded', '1')
   }
   if (lssdView) {
     lssdView.classList.toggle('wv-off', !lssd)
@@ -2013,6 +1978,8 @@ function showTab(name) {
   })
   renderPageBar()
   if (pcBar) pcBar.classList.toggle('hidden', !penal && !penalBackup)
+  const pcSignout = el('pc-signout')
+  if (pcSignout) pcSignout.classList.toggle('hidden', penalBackup)
   const tabMdc = document.getElementById('tab-mdc')
   const tabLssd = document.getElementById('tab-lssd')
   const tabForum = document.getElementById('tab-forum')
@@ -2068,14 +2035,12 @@ const actions = {
     if (r === 0) {
       await window.mdt.clearForumSession()
       setStatus('Forum oturumu temizlendi')
-      const views = [pcv, penalBackupView]
-      views.forEach((webview) => {
-        if (!webview || webview.getAttribute('data-loaded') !== '1') return
+      if (pcv && pcv.getAttribute('data-loaded') === '1') {
         try {
-          webview.loadURL(PENAL_URL)
+          pcv.loadURL(PENAL_URL)
         } catch (_) {
         }
-      })
+      }
     }
   },
   themelight: () => setTheme('light'),

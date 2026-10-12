@@ -3,7 +3,7 @@
 ## 1.0.11
 
 ### Ceza Kanunu
-- Resmî Ceza Kanunu konusu, özel ön yükleme olmadan ve bağımsız oturum deposunda açılan bir yedek sekme olarak eklendi. Yedek sekme de arama ve eşleşme sayısını destekler.
+- Yedek kanun görünümü, örnek tasarıma uygun renkli (I)/(F)/(M) suç rozetleri ve Infraction/Misdemeanor/Felony vurgularıyla zenginleştirildi. Başlık VIII'de “Suç Ortağı & Suça Yardım Eden Sorumluluğu” ile “Tamamlanmamış Suçlar” ayrı bölümlere ayrıldı.
 
 ## 1.0.10
 
