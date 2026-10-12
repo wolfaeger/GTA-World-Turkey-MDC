@@ -1,7 +1,7 @@
-#define AppName "Mobile Data Computer - GTA World TR"
+#define AppName "Mobile Data Computer Client"
 #define AppVersion "1.0.0"
-#define AppPublisher "Mobile Data Computer - GTA World TR"
-#define AppExe "Mobile Data Computer - GTA World TR.exe"
+#define AppPublisher "Mobile Data Computer Client"
+#define AppExe "Mobile Data Computer Client.exe"
 #define SourceDir "..\dist\win-unpacked"
 
 [Setup]
@@ -15,7 +15,7 @@ DefaultGroupName={#AppName}
 UninstallDisplayIcon={app}\{#AppExe}
 UninstallDisplayName={#AppName}
 OutputDir=Output
-OutputBaseFilename=Mobile-Data-Computer-GTA-World-TR-Setup-{#AppVersion}
+OutputBaseFilename=Mobile-Data-Computer-Client-Setup-{#AppVersion}
 SetupIconFile=..\build\icon.ico
 Compression=lzma2/max
 SolidCompression=yes
