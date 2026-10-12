@@ -47,8 +47,7 @@
       <div class="menu-item" data-action="tabmdc">MDC<span class="accel">Ctrl+1</span></div>
       <div class="menu-item" data-action="tablssd">LSSD Intranet<span class="accel">Ctrl+2</span></div>
       <div class="menu-item" data-action="tabforum">LSSD Forum<span class="accel">Ctrl+3</span></div>
-      <div class="menu-item" data-action="tabpenal">San Andreas Ceza Kanunu<span class="accel">Ctrl+4</span></div>
-      <div class="menu-item" data-action="tabpenalbackup">Ceza Kanunu (Yedek)<span class="accel">Ctrl+5</span></div>
+      <div class="menu-item" data-action="tabpenal">Ceza Kanunu<span class="accel">Ctrl+4</span></div>
     </div>
   </div>
 
@@ -134,8 +133,7 @@
   <button class="tab active" id="tab-mdc" title="Mobil Veri Bilgisayarı (Ctrl+1)">MDC</button>
   <button class="tab" id="tab-lssd" title="LSSD Intranet (Ctrl+2)">LSSD Intranet</button>
   <button class="tab" id="tab-forum" title="LSSD Forum (Ctrl+3)">LSSD Forum</button>
-  <button class="tab" id="tab-penal" title="San Andreas Ceza Kanunu (Ctrl+4)">Ceza Kanunu</button>
-  <button class="tab" id="tab-penal-backup" title="Ceza Kanunu yedek görünümü (Ctrl+5)">Ceza Kanunu (Yedek)</button>
+  <button class="tab" id="tab-penal" title="Ceza Kanunu (Ctrl+4)">Ceza Kanunu</button>
   <span id="tab-nav" class="tabnav hidden"></span>
 </div>
 
@@ -162,15 +160,8 @@
   <webview
     id="penal"
     src="about:blank"
-    partition="persist:gtaw-mdc"
-    preload="../forum-preload.js"
-    class="wv-off"
-    allowpopups>
-  </webview>
-  <webview
-    id="penal-backup"
-    src="about:blank"
     partition="persist:gtaw-penal-backup"
+    preload="../forum-preload.js"
     class="wv-off"
     allowpopups>
   </webview>

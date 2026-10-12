@@ -445,7 +445,7 @@ const CTRL_HOTKEYS = {
 }
 
 window.addEventListener('keydown', (e) => {
-  if (!e || e.defaultPrevented) return
+  if (!e || e.defaultPrevented || !isTopicPage()) return
   let action = ''
   if (e.ctrlKey || e.metaKey) {
     if (e.altKey || e.shiftKey) return
@@ -463,7 +463,7 @@ window.addEventListener('keydown', (e) => {
 
 function boot() {
   applyTheme()
-  watchClicks()
+  if (isTopicPage()) watchClicks()
   reportPage()
   if (lastQuery) filterPenal(lastQuery)
 }
@@ -479,7 +479,7 @@ if (typeof MutationObserver === 'function') {
     applyTheme()
   })
   const start = () => {
-    if (document.body) observer.observe(document.body, { childList: true, subtree: true })
+    if (document.body && isTopicPage()) observer.observe(document.body, { childList: true, subtree: true })
   }
   if (document.body) start()
   else document.addEventListener('DOMContentLoaded', start)
