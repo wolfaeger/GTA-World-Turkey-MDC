@@ -1544,7 +1544,7 @@ const QUICK_BUTTONS = [
   { icon: 'home.png', label: 'Ana Sayfa', match: /dashboard|^home$|ana sayfa|gösterge/i, url: HOME },
   { icon: 'query.png', label: 'Sorgu', match: /person lookup|kişi sorgu|şahıs sorgu/i, url: HOME },
   { icon: 'traffic.png', label: 'Trafik', match: /dmv database|motorlu taşıt|plaka/i, url: DMV_URL },
-  { icon: 'c6.png', label: 'C6', match: /vehicle map|araç haritası/i, url: HOME + 'map/vehicles' },
+  { icon: 'c6.png', label: 'Code 6', match: /vehicle map|araç haritası/i, url: HOME + 'map/vehicles' },
   { icon: 'calls.png', label: 'Çağrılar', match: /incident database|olay veritabanı|olay listesi/i, url: HOME + 'emergency/list' }
 ]
 
