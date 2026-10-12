@@ -1,5 +1,10 @@
 # Sürüm Notları
 
+## 1.0.7
+
+### Uygulama altyapısı
+- Electron, Chromium 152 tabanlı 44.7.0 sürümüne yükseltildi. Release build'i Node.js 22 ile oluşturulur.
+
 ## 1.0.0
 
 GTA World TR için ilk herkese açık sürüm. Önceki geliştirme sürümlerindeki özellikler ve düzeltmeler bu sürümde bir araya getirilmiştir.

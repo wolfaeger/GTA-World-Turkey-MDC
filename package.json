@@ -14,7 +14,7 @@
     "icon": "python3 tools/mk_icon.py"
   },
   "devDependencies": {
-    "electron": "^31.0.0",
+    "electron": "44.7.0",
     "electron-builder": "^24.13.3"
   },
   "build": {
@@ -37,7 +37,9 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "icon": "build/icon.ico"
