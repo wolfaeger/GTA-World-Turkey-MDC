@@ -97,6 +97,7 @@ for (let i = 0; i < MENU_ITEM_COUNT; i++) {
 }
 
 const documentListeners = {}
+const createdNodes = []
 
 const document = {
   title: '',
@@ -117,7 +118,11 @@ const document = {
     return []
   },
   addEventListener(ev, fn) { (documentListeners[ev] = documentListeners[ev] || []).push(fn) },
-  createElement: () => makeNode(''),
+  createElement: () => {
+    const created = makeNode('')
+    createdNodes.push(created)
+    return created
+  },
   createTextNode: () => ({}),
   dispatchEvent: () => true
 }
@@ -224,6 +229,30 @@ if (typeof sandbox.showTab !== 'function') {
     current = 'https://example.test/' + tab + '/after-redirect'
     viewNode.dispatch('did-stop-loading', {})
     if (addressNode.value !== current) failures.push(tab + ': address box did not refresh when loading stopped')
+  }
+  sandbox.showTab('mdc')
+}
+
+if (typeof sandbox.showTab === 'function') {
+  const pageBar = nodes.get('page-bar')
+  const tabMdc = nodes.get('tab-mdc')
+  for (const tab of ['lssd', 'forum', 'penal', 'penal-backup']) {
+    const mark = createdNodes.length
+    sandbox.showTab(tab)
+    if (!pageBar) {
+      failures.push('page bar element was never looked up')
+      break
+    }
+    if (pageBar.classList.contains('hidden')) failures.push(tab + ': the page bar is hidden outside the MDC tab')
+    const pageTabs = createdNodes.slice(mark).filter((n) => /\bpagetab\b/.test(n.className || ''))
+    if (!pageTabs.length) {
+      failures.push(tab + ': the page bar was drawn without any page buttons')
+      continue
+    }
+    if (pageTabs.some((n) => /\bactive\b/.test(n.className))) failures.push(tab + ': a page button looks selected while another tab is open')
+    tabMdc.classList.remove('active')
+    pageTabs[0].dispatch('click')
+    if (!tabMdc.classList.contains('active')) failures.push(tab + ': clicking a page button did not return to the MDC tab')
   }
   sandbox.showTab('mdc')
 }

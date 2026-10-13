@@ -159,7 +159,7 @@ function renderPageBar() {
 
   pages.forEach((p) => {
     const btn = document.createElement('button')
-    btn.className = 'pagetab' + (p.id === activePageId ? ' active' : '')
+    btn.className = 'pagetab' + (p.id === activePageId && activeTab === 'mdc' ? ' active' : '')
     btn.title = p.title || 'Sayfa'
 
     const label = document.createElement('span')
@@ -179,7 +179,10 @@ function renderPageBar() {
       btn.appendChild(x)
     }
 
-    on(btn, 'click', () => showPage(p.id))
+    on(btn, 'click', () => {
+      if (activeTab !== 'mdc') showTab('mdc')
+      showPage(p.id)
+    })
     row.appendChild(btn)
   })
 
@@ -190,7 +193,7 @@ function renderPageBar() {
   on(add, 'click', () => openPage(HOME))
   row.appendChild(add)
 
-  bar.classList.toggle('hidden', activeTab !== 'mdc')
+  bar.classList.remove('hidden')
 }
 
 const address = el('address')
@@ -2009,7 +2012,9 @@ function showTab(name) {
 const actions = {
   home: () => { showTab('mdc'); wv.loadURL(HOME) },
   newpage: () => openPage(HOME),
-  closepage: () => closePage(activePageId),
+  closepage: () => {
+    if (activeTab === 'mdc') closePage(activePageId)
+  },
   reload: () => activeView().reload(),
   stop: () => activeView().stop(),
   back: () => { const v = activeView(); if (v.canGoBack()) v.goBack() },

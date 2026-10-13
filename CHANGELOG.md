@@ -1,5 +1,11 @@
 # Sürüm Notları
 
+## 1.0.1
+
+### Sayfalar ve gezinme
+- Sayfalar şeridi artık LSSD Intranet, LSSD Forum, Ceza Kanunu ve Ceza Kanunu (Yedek) sekmelerinde de görünür. Bu sekmelerdeyken şeritteki bir sayfaya ya da + düğmesine tıklamak MDC sekmesine döner. Başka bir sekme açıkken şeritte hiçbir sayfa seçili görünmez.
+- Ctrl+W yalnızca MDC sekmesindeyken sayfayı kapatır. Başka bir sekmedeyken görünmeyen bir MDC sayfasını kapatmaz.
+
 ## 1.0.0
 
 GTA World TR için ilk herkese açık sürüm. Geliştirme sürecindeki tüm özellikler ve düzeltmeler bu sürümde bir araya getirilmiştir.
