@@ -1272,23 +1272,6 @@ function showKeys() {
   })
 }
 
-const webview = document.getElementById('forum-webview');
-
-if (webview) {
-    webview.addEventListener('context-menu', (e) => {
-        e.preventDefault();
-        const { x, y, linkURL, pageURL } = e.params || {};
-        
-        if (window.electronAPI && window.electronAPI.send) {
-            window.electronAPI.send('show-context-menu', {
-                x, y, linkURL, pageURL,
-                canGoBack: typeof webview.canGoBack === 'function' ? webview.canGoBack() : false,
-                canGoForward: typeof webview.canGoForward === 'function' ? webview.canGoForward() : false
-            });
-        }
-    });
-}
-
 let lastUpdate = null
 
 function renderUpdate(res) {
@@ -1644,31 +1627,6 @@ function wirePenalView(webview) {
     findCount.textContent = r.matches ? (r.activeMatchOrdinal || 0) + ' / ' + r.matches : 'Eşleşme yok'
   })
 }
-
-// Webview içi gezinmeleri dinleyip adres çubuğunu güncelleyen fonksiyon
-function setupWebViewNavigation(webviewElement, addressBarInput) {
-    if (!webviewElement) return;
-
-    const updateAddress = (event) => {
-        if (addressBarInput && event.url) {
-            addressBarInput.value = event.url;
-        }
-    };
-
-    // Tam sayfa yönlendirmelerinde URL güncelleme
-    webviewElement.addEventListener('did-navigate', updateAddress);
-    
-    // SPA / Sayfa içi dinamik yönlendirmelerde (hash, pushState) URL güncelleme
-    webviewElement.addEventListener('did-navigate-in-page', updateAddress);
-}
-
-// LSSD Intranet ve LSSD Forum webview'leri için bu dinleyiciyi çalıştırın:
-const intranetWebview = document.getElementById('intranet-webview'); // Projendeki ilgili ID
-const forumWebview = document.getElementById('forum-webview');       // Projendeki ilgili ID
-const addressInput = document.getElementById('address-bar-input');  // Adres çubuğu input ID'si
-
-setupWebViewNavigation(intranetWebview, addressInput);
-setupWebViewNavigation(forumWebview, addressInput);
 
 function wireBackupPenalView() {
   if (!penalBackupView) return

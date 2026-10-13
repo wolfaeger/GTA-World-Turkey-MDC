@@ -35,34 +35,6 @@ try {
 const PARTITION = 'persist:gtaw-mdc'
 const MDC_URL = 'https://mdc-tr.gta.world/'
 
-// main.js içerisinde
-ipcMain.on('show-context-menu', (event, params) => {
-    const template = [
-        { label: 'Geri', enabled: params.canGoBack, click: () => event.sender.goBack() },
-        { label: 'İleri', enabled: params.canGoForward, click: () => event.sender.goForward() },
-        { label: 'Yeniden Yükle', click: () => event.sender.reload() },
-        { type: 'separator' },
-    ];
-
-    // Eğer sağ tıklanan yer bir bağlantı (link) ise:
-    if (params.linkURL) {
-        template.push(
-            { label: 'Bağlantıyı Yeni Sekmede Aç', click: () => shell.openExternal(params.linkURL) },
-            { label: 'Bağlantı Adresini Kopyala', click: () => { require('electron').clipboard.writeText(params.linkURL); } },
-            { type: 'separator' }
-        );
-    }
-
-    // DevTools (İncele) seçeneği
-    template.push(
-        { label: 'Sayfa Kaynağını Görüntüle', click: () => { shell.openExternal(`view-source:${params.pageURL}`); } },
-        { label: 'İncele', click: () => event.sender.inspectElement(params.x, params.y) }
-    );
-
-    const menu = Menu.buildFromTemplate(template);
-    menu.popup(BrowserWindow.fromWebContents(event.sender));
-});
-
 let mainWindow = null
 let tray = null
 let trayEnabled = false
