@@ -1272,19 +1272,22 @@ function showKeys() {
   })
 }
 
-const webview = document.getElementById('forum-webview'); // veya ilgili webview elementi
+const webview = document.getElementById('forum-webview');
 
-webview.addEventListener('context-menu', (e) => {
-    e.preventDefault();
-    const { x, y, linkURL, pageURL, canGoBack, canGoForward } = e.params;
-    
-    // Main process'e menüyü açması için yönlendir
-    ipcRenderer.send('show-context-menu', {
-        x, y, linkURL, pageURL,
-        canGoBack: webview.canGoBack(),
-        canGoForward: webview.canGoForward()
+if (webview) {
+    webview.addEventListener('context-menu', (e) => {
+        e.preventDefault();
+        const { x, y, linkURL, pageURL } = e.params || {};
+        
+        if (window.electronAPI && window.electronAPI.send) {
+            window.electronAPI.send('show-context-menu', {
+                x, y, linkURL, pageURL,
+                canGoBack: typeof webview.canGoBack === 'function' ? webview.canGoBack() : false,
+                canGoForward: typeof webview.canGoForward === 'function' ? webview.canGoForward() : false
+            });
+        }
     });
-});
+}
 
 let lastUpdate = null
 
