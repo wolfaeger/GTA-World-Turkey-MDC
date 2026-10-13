@@ -36,8 +36,6 @@ const PARTITION = 'persist:gtaw-mdc'
 const MDC_URL = 'https://mdc-tr.gta.world/'
 
 // main.js içerisinde
-const { app, BrowserWindow, Menu, MenuItem, ipcMain, shell } = require('electron');
-
 ipcMain.on('show-context-menu', (event, params) => {
     const template = [
         { label: 'Geri', enabled: params.canGoBack, click: () => event.sender.goBack() },
