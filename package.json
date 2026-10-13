@@ -1,0 +1,56 @@
+{
+  "name": "mdc-client",
+  "version": "1.0.0",
+  "description": "Mobile Data Computer Client - Masaüstü istemcisi",
+  "main": "main.js",
+  "author": "Mobile Data Computer Client",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "smoke": "node --check main.js && node --check preload.js && node --check webview-preload.js && node --check renderer/renderer.js && node tools/smoke.js",
+    "dist": "electron-builder --win",
+    "pack": "electron-builder --dir",
+    "icon": "python3 tools/mk_icon.py"
+  },
+  "devDependencies": {
+    "electron": "44.7.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "world.gta.mdcclient",
+    "productName": "Mobile Data Computer Client",
+    "artifactName": "Mobile-Data-Computer-Client-Setup-${version}.${ext}",
+    "files": [
+      "main.js",
+      "preload.js",
+      "forum-preload.js",
+      "webview-preload.js",
+      "renderer/**/*",
+      "build/**/*"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Mobile Data Computer Client"
+    }
+  }
+}
