@@ -6,11 +6,7 @@ const os = require('os')
 const https = require('https')
 const { app, BrowserWindow, ipcMain, session, shell, dialog, Tray, Menu, nativeImage } = require('electron')
 
-<<<<<<< HEAD
-const LEGACY_APP_DIRS = ['Mobile Data Computer Client', 'mdc-client', 'MDT Terminal', 'mdt-terminal']
-=======
 const LEGACY_APP_DIRS = ['PatrolOne Mobile Client', 'mdc-client', 'MDT Terminal', 'mdt-terminal']
->>>>>>> 443a1dfdf01ad1c3e74e121fd8f2be18ded2a8a1
 
 try {
   const appData = app.getPath('appData')
@@ -39,7 +35,6 @@ try {
 const PARTITION = 'persist:gtaw-mdc'
 const MDC_URL = 'https://mdc-tr.gta.world/'
 
-<<<<<<< HEAD
 // main.js içerisinde
 const { app, BrowserWindow, Menu, MenuItem, ipcMain, shell } = require('electron');
 
@@ -70,8 +65,6 @@ ipcMain.on('show-context-menu', (event, params) => {
     menu.popup(BrowserWindow.fromWebContents(event.sender));
 });
 
-=======
->>>>>>> 443a1dfdf01ad1c3e74e121fd8f2be18ded2a8a1
 let mainWindow = null
 let tray = null
 let trayEnabled = false
