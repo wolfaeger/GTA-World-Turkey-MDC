@@ -1,9 +1,9 @@
 {
   "name": "mdc-client",
   "version": "1.0.0",
-  "description": "Mobile Data Computer - GTA World TR masaüstü istemcisi",
+  "description": "Mobile Data Computer masaüstü istemcisidir.",
   "main": "main.js",
-  "author": "Mobile Data Computer - GTA World TR",
+  "author": "Mobile Data Computer Client",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -19,8 +19,8 @@
   },
   "build": {
     "appId": "world.gta.mdcclient",
-    "productName": "Mobile Data Computer - GTA World TR",
-    "artifactName": "Mobile-Data-Computer-GTA-World-TR-Setup-${version}.${ext}",
+    "productName": "Mobile Data Computer Client",
+    "artifactName": "Mobile-Data-Computer-Client-Setup-${version}.${ext}",
     "files": [
       "main.js",
       "guest-menu.js",
@@ -51,7 +51,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Mobile Data Computer - GTA World TR"
+      "shortcutName": "Mobile Data Computer Client"
     }
   }
 }
