@@ -1,5 +1,20 @@
 # Sürüm Notları
 
+## 1.0.23
+
+### Sekmeler
+- LSSD Intranet, LSSD Forum ve Ceza Kanunu sekmelerinde üstteki adres kutusu artık sayfa değiştikçe güncellenir. Önceden adres, sekmeden çıkıp geri dönene kadar eski sayfayı gösteriyordu.
+
+### Sağ tık menüsü
+- LSSD Intranet, LSSD Forum, Ceza Kanunu ve yedek kanun sekmelerinde sağ tık menüsü eklendi.
+- Boş alanda: Geri, İleri, Yeniden Yükle, Farklı Kaydet, Yazdır, Sayfa Kaynağını Görüntüle ve İncele.
+- Bağlantıda: Yeni Sayfada Aç (GTA World bağlantıları), Tarayıcıda Aç, Bağlantıyı İndir, Bağlantı Adresini Kopyala ve izleme parametrelerinden arındırılmış Temiz Bağlantıyı Kopyala.
+- Resimde, seçili metinde ve yazı alanlarında kopyalama, yapıştırma ve benzeri işlemler sunulur.
+- MDC sayfasının kendi bağlantı davranışı değişmedi.
+
+### Güvenlik
+- Site pencerelerinden açılan bağlantılar yalnızca http ve https ise tarayıcıda açılır.
+
 ## 1.0.11
 
 ### Ceza Kanunu

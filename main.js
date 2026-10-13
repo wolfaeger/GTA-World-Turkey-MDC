@@ -4,7 +4,8 @@ const path = require('path')
 const fs = require('fs')
 const os = require('os')
 const https = require('https')
-const { app, BrowserWindow, ipcMain, session, shell, dialog, Tray, Menu, nativeImage } = require('electron')
+const { app, BrowserWindow, ipcMain, session, shell, dialog, Tray, Menu, nativeImage, clipboard } = require('electron')
+const { createGuestMenu } = require('./guest-menu')
 
 const LEGACY_APP_DIRS = ['PatrolOne Mobile Client', 'mdc-client', 'MDT Terminal', 'mdt-terminal']
 
@@ -242,9 +243,22 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
+const guestMenu = createGuestMenu({
+  Menu,
+  BrowserWindow,
+  clipboard,
+  dialog,
+  shell,
+  getMainWindow: () => mainWindow,
+  openInApp: (url) => {
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('app:openPage', url)
+  }
+})
+
 app.on('web-contents-created', (_event, contents) => {
   if (contents.getType() === 'webview') {
     guests.add(contents)
+    guestMenu.attach(contents)
     contents.on('destroyed', () => guests.delete(contents))
     try {
       contents.setBackgroundThrottling(false)
@@ -387,6 +401,7 @@ function wireDownloads() {
     const ses = session.fromPartition(PARTITION)
     ses.on('will-download', (event, item) => {
       try {
+        if (item.getSavePath && item.getSavePath()) return
         const dir = app.getPath('downloads')
         const base = item.getFilename() || 'download.png'
         const dot = base.lastIndexOf('.')

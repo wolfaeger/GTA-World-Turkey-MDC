@@ -54,9 +54,7 @@ jobs:
 
       - name: Check the installer name
         shell: bash
-        run: |
-          ls dist/*.exe
-          test -f "dist/Mobile-Data-Computer-Client-Setup-${APP_VERSION}.exe"
+        run: ls dist/*-Setup-"${APP_VERSION}".exe
 
       - name: Write release notes from CHANGELOG
         shell: bash

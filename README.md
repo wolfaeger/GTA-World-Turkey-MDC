@@ -1,6 +1,6 @@
 # Mobile Data Computer - GTA World TR
 
-GTA World Web MDC için sade bir masaüstü istemcisidir
+GTA World Web MDC için sade bir masaüstü kabuğu
 (<https://mdc-tr.gta.world/>). Site, uygulamanın içine gömülü bir tarayıcıda
 açılır; menü çubuğu, araç çubuğu ve durum çubuğu ise standart HTML öğeleridir.
 Görünüm bilerek gösterişsiz tutuldu: sistem yazı tipleri, gri paneller ve köşeli
@@ -119,6 +119,7 @@ tutun.
 ```
 main.js               pencere, kalıcı oturum, sistem tepsisi, IPC
 preload.js            uygulama penceresi için küçük köprü
+guest-menu.js         site sekmelerindeki (Intranet, Forum, Ceza Kanunu) sağ tık menüsü
 webview-preload.js    MDC sayfasında tema, düzeltmeler ve yan panel anahtarı
 renderer/
     index.html            menü, araç çubuğu, arama çubuğu, durum çubuğu, pencere
@@ -221,6 +222,13 @@ arayüzü metaverileri çıkarılmıştır. Başlık VIII'deki suç ortaklığı
 suçlar ayrı alt başlıklar halinde sunulur.
 Ağ bağlantısı veya forum oturumu gerektirmez. Arama ve temizleme düğmeleri
 yedekte de kullanılabilir ve eşleşen madde sayısını gösterir.
+
+LSSD Intranet, LSSD Forum ve Ceza Kanunu sekmelerinde sağ tıklayınca bir menü açılır
+(Geri, İleri, Yeniden Yükle, Farklı Kaydet, Yazdır, Sayfa Kaynağını Görüntüle, İncele).
+Bağlantılarda ayrıca Yeni Sayfada Aç, Tarayıcıda Aç, Bağlantıyı İndir, Bağlantı Adresini
+Kopyala ve Temiz Bağlantıyı Kopyala bulunur. Bu menü `guest-menu.js` içindedir. MDC
+sekmesi bundan etkilenmez; orada bağlantılara sağ tıklamak bağlantıyı yeni sayfada açar.
+Üstteki adres kutusu, bu sekmelerde gezdikçe geçerli adresi gösterir.
 
 Forumda ayrıca oturum açmanız gerekir; bunu sekmede, tarayıcıda yaptığınız gibi
 yapabilirsiniz. Forum giriş bilgileri saklanmaz. Giriş yapana kadar forum sayfası
