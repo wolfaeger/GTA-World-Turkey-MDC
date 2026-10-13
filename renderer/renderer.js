@@ -1272,6 +1272,7 @@ function showKeys() {
   })
 }
 
+<<<<<<< HEAD
 const webview = document.getElementById('forum-webview'); // veya ilgili webview elementi
 
 webview.addEventListener('context-menu', (e) => {
@@ -1286,6 +1287,8 @@ webview.addEventListener('context-menu', (e) => {
     });
 });
 
+=======
+>>>>>>> 443a1dfdf01ad1c3e74e121fd8f2be18ded2a8a1
 let lastUpdate = null
 
 function renderUpdate(res) {
@@ -1642,6 +1645,7 @@ function wirePenalView(webview) {
   })
 }
 
+<<<<<<< HEAD
 // Webview içi gezinmeleri dinleyip adres çubuğunu güncelleyen fonksiyon
 function setupWebViewNavigation(webviewElement, addressBarInput) {
     if (!webviewElement) return;
@@ -1667,6 +1671,8 @@ const addressInput = document.getElementById('address-bar-input');  // Adres çu
 setupWebViewNavigation(intranetWebview, addressInput);
 setupWebViewNavigation(forumWebview, addressInput);
 
+=======
+>>>>>>> 443a1dfdf01ad1c3e74e121fd8f2be18ded2a8a1
 function wireBackupPenalView() {
   if (!penalBackupView) return
 
