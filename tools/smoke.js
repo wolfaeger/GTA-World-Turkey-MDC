@@ -202,6 +202,41 @@ if (menuNodes.length) {
   if (menuNodes[0].classList.contains('open')) failures.push('clicking elsewhere did not close the menu')
 }
 
+if (typeof sandbox.showTab !== 'function') {
+  failures.push('showTab is not reachable, cannot check address bar syncing')
+} else {
+  const addressNode = nodes.get('address')
+  const checks = [['lssd', 'lssd'], ['forum', 'lssd-forum'], ['penal', 'penal']]
+  for (const [tab, id] of checks) {
+    const viewNode = nodes.get(id)
+    if (!viewNode || !addressNode) {
+      failures.push('address check could not find the ' + id + ' view or the address box')
+      continue
+    }
+    sandbox.showTab(tab)
+    let current = 'https://example.test/' + tab + '/reports/incident/new'
+    viewNode.getURL = () => current
+    viewNode.dispatch('did-navigate-in-page', {})
+    if (addressNode.value !== current) failures.push(tab + ': address box did not follow an in-page navigation')
+    current = 'https://example.test/' + tab + '/home'
+    viewNode.dispatch('did-navigate', {})
+    if (addressNode.value !== current) failures.push(tab + ': address box did not follow a page navigation')
+    current = 'https://example.test/' + tab + '/after-redirect'
+    viewNode.dispatch('did-stop-loading', {})
+    if (addressNode.value !== current) failures.push(tab + ': address box did not refresh when loading stopped')
+  }
+  sandbox.showTab('mdc')
+}
+
+const pkgJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
+const mainSource = fs.readFileSync(path.join(root, 'main.js'), 'utf8')
+for (const m of mainSource.matchAll(/require\('\.\/([\w-]+)'\)/g)) {
+  const file = m[1] + '.js'
+  if (!pkgJson.build.files.includes(file)) {
+    failures.push(file + ' is required by main.js but missing from build.files (the installed app would crash on start)')
+  }
+}
+
 if (warnings.length) {
   console.log('warnings from renderer.js:')
   warnings.forEach((w) => console.log('  ' + w))

@@ -2382,6 +2382,31 @@ function updateNav() {
   }
 }
 
+function syncAddress(tab) {
+  if (activeTab !== tab || !address) return
+  try {
+    address.value = activeView().getURL()
+  } catch (_) {
+  }
+}
+
+function trackNavigation(view, tab) {
+  const refresh = () => {
+    syncAddress(tab)
+    updateNav()
+  }
+  on(view, 'did-navigate', refresh)
+  on(view, 'did-navigate-in-page', refresh)
+  on(view, 'did-stop-loading', () => syncAddress(tab))
+}
+
+boot('open-page-ipc', () => {
+  if (!window.mdt || typeof window.mdt.onOpenPage !== 'function') return
+  window.mdt.onOpenPage((url) => {
+    if (/^https?:\/\//i.test(url)) openPage(url)
+  })
+})
+
 boot('sidebar-button', () => {
   on(el('btn-sidebar'), 'click', () => run('togglesidebar'))
 })
@@ -2498,6 +2523,7 @@ boot('penal', () => {
   if (!pcv) return
 
   wirePenalView(pcv)
+  trackNavigation(pcv, 'penal')
 })
 
 boot('penal-backup', () => {
@@ -2522,8 +2548,7 @@ boot('lssd', () => {
     playSound('error')
   })
 
-  on(lssdView, 'did-navigate', updateNav)
-  on(lssdView, 'did-navigate-in-page', updateNav)
+  trackNavigation(lssdView, 'lssd')
   on(lssdView, 'page-title-updated', (e) => {
     if (activeTab !== 'lssd') return
     document.title = APP_NAME
@@ -2552,8 +2577,7 @@ boot('lssd-forum', () => {
     playSound('error')
   })
 
-  on(lssdForumView, 'did-navigate', updateNav)
-  on(lssdForumView, 'did-navigate-in-page', updateNav)
+  trackNavigation(lssdForumView, 'forum')
   on(lssdForumView, 'page-title-updated', (e) => {
     if (activeTab !== 'forum') return
     document.title = APP_NAME

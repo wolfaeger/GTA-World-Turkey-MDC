@@ -1,14 +1,14 @@
 {
   "name": "mdc-client",
   "version": "1.0.0",
-  "description": "Mobile Data Computer Client - Masaüstü istemcisi",
+  "description": "Mobile Data Computer - GTA World TR masaüstü istemcisi",
   "main": "main.js",
-  "author": "Mobile Data Computer Client",
+  "author": "Mobile Data Computer - GTA World TR",
   "license": "MIT",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "smoke": "node --check main.js && node --check preload.js && node --check webview-preload.js && node --check renderer/renderer.js && node tools/smoke.js",
+    "smoke": "node --check main.js && node --check guest-menu.js && node --check preload.js && node --check webview-preload.js && node --check renderer/renderer.js && node tools/smoke.js",
     "dist": "electron-builder --win",
     "pack": "electron-builder --dir",
     "icon": "python3 tools/mk_icon.py"
@@ -19,10 +19,11 @@
   },
   "build": {
     "appId": "world.gta.mdcclient",
-    "productName": "Mobile Data Computer Client",
-    "artifactName": "Mobile-Data-Computer-Client-Setup-${version}.${ext}",
+    "productName": "Mobile Data Computer - GTA World TR",
+    "artifactName": "Mobile-Data-Computer-GTA-World-TR-Setup-${version}.${ext}",
     "files": [
       "main.js",
+      "guest-menu.js",
       "preload.js",
       "forum-preload.js",
       "webview-preload.js",
@@ -50,7 +51,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Mobile Data Computer Client"
+      "shortcutName": "Mobile Data Computer - GTA World TR"
     }
   }
 }

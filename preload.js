@@ -14,6 +14,15 @@ contextBridge.exposeInMainWorld('mdt', {
   checkUpdates: () => ipcRenderer.invoke('app:checkUpdates'),
   installUpdate: (payload) => ipcRenderer.invoke('app:installUpdate', payload),
   setPresence: (payload) => ipcRenderer.invoke('app:setPresence', payload),
+  onOpenPage: (fn) => {
+    if (typeof fn !== 'function') return
+    ipcRenderer.on('app:openPage', (_e, url) => {
+      try {
+        fn(String(url || ''))
+      } catch (_) {
+      }
+    })
+  },
   onWake: (fn) => {
     if (typeof fn !== 'function') return
     ipcRenderer.on('app:wake', () => {
