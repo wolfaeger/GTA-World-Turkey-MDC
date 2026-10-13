@@ -1,10 +1,6 @@
 # Mobile Data Computer - GTA World TR
 
-<<<<<<< HEAD
-GTA World Web MDC için sade bir masaüstü kabuğu
-=======
 GTA World Web MDC için sade bir masaüstü istemcisidir
->>>>>>> 443a1dfdf01ad1c3e74e121fd8f2be18ded2a8a1
 (<https://mdc-tr.gta.world/>). Site, uygulamanın içine gömülü bir tarayıcıda
 açılır; menü çubuğu, araç çubuğu ve durum çubuğu ise standart HTML öğeleridir.
 Görünüm bilerek gösterişsiz tutuldu: sistem yazı tipleri, gri paneller ve köşeli
