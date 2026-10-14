@@ -45,6 +45,14 @@ let pages = []
 let pageSeq = 0
 let activePageId = ''
 
+const AUX_TABS = {
+  lssd: 'LSSD Intranet',
+  forum: 'LSSD Forum',
+  penal: 'Ceza Kanunu',
+  'penal-backup': 'Ceza Kanunu (Yedek)'
+}
+let auxOpen = []
+
 function allPageViews() {
   return pages.map((p) => p.el).filter((v) => !!v)
 }
@@ -144,6 +152,75 @@ function closePage(id) {
   playSound('close')
 }
 
+function barItems() {
+  const items = []
+  pages.forEach((p) => items.push({ seq: Number(String(p.id).split('-')[1]) || 0, page: p }))
+  auxOpen.forEach((a) => items.push({ seq: a.seq, aux: a }))
+  items.sort((a, b) => a.seq - b.seq)
+  return items
+}
+
+function openAux(tab) {
+  if (!AUX_TABS[tab] || auxOpen.some((a) => a.tab === tab)) return
+  pageSeq += 1
+  auxOpen.push({ tab, seq: pageSeq })
+}
+
+function resetAuxView(tab) {
+  const v = { lssd: lssdView, forum: lssdForumView, penal: pcv }[tab]
+  if (!v) return
+  v.setAttribute('data-loaded', '0')
+  try {
+    v.loadURL('about:blank')
+  } catch (_) {
+  }
+}
+
+function closeAux(tab) {
+  const items = barItems()
+  const idx = items.findIndex((it) => it.aux && it.aux.tab === tab)
+  if (idx < 0) return
+  const wasActive = activeTab === tab
+  auxOpen = auxOpen.filter((a) => a.tab !== tab)
+  resetAuxView(tab)
+  if (wasActive) {
+    const prev = items[idx - 1] || items[idx + 1]
+    if (prev && prev.aux) {
+      showTab(prev.aux.tab)
+    } else {
+      showTab('mdc')
+      if (prev && prev.page) showPage(prev.page.id)
+    }
+  } else {
+    renderPageBar()
+  }
+  playSound('close')
+}
+
+function auxButton(a) {
+  const btn = document.createElement('button')
+  btn.className = 'pagetab' + (activeTab === a.tab ? ' active' : '')
+  btn.title = AUX_TABS[a.tab]
+
+  const label = document.createElement('span')
+  label.className = 'pagelabel'
+  label.textContent = AUX_TABS[a.tab]
+  btn.appendChild(label)
+
+  const x = document.createElement('span')
+  x.className = 'pageclose'
+  x.textContent = '\u2716'
+  x.title = 'Bu sayfayı kapat'
+  on(x, 'click', (ev) => {
+    if (ev && ev.stopPropagation) ev.stopPropagation()
+    closeAux(a.tab)
+  })
+  btn.appendChild(x)
+
+  on(btn, 'click', () => showTab(a.tab))
+  return btn
+}
+
 function renderPageBar() {
   const bar = el('page-bar')
   if (!bar) return
@@ -157,7 +234,12 @@ function renderPageBar() {
   row.className = 'pagerow'
   bar.appendChild(row)
 
-  pages.forEach((p) => {
+  barItems().forEach((item) => {
+    if (item.aux) {
+      row.appendChild(auxButton(item.aux))
+      return
+    }
+    const p = item.page
     const btn = document.createElement('button')
     btn.className = 'pagetab' + (p.id === activePageId && activeTab === 'mdc' ? ' active' : '')
     btn.title = p.title || 'Sayfa'
@@ -1934,6 +2016,7 @@ function setNav(items) {
 
 function showTab(name) {
   activeTab = ['penal', 'penal-backup', 'lssd', 'forum'].includes(name) ? name : 'mdc'
+  if (AUX_TABS[activeTab]) openAux(activeTab)
   const penal = activeTab === 'penal'
   const penalBackup = activeTab === 'penal-backup'
   const lssd = activeTab === 'lssd'
@@ -2013,7 +2096,8 @@ const actions = {
   home: () => { showTab('mdc'); wv.loadURL(HOME) },
   newpage: () => openPage(HOME),
   closepage: () => {
-    if (activeTab === 'mdc') closePage(activePageId)
+    if (AUX_TABS[activeTab]) closeAux(activeTab)
+    else closePage(activePageId)
   },
   reload: () => activeView().reload(),
   stop: () => activeView().stop(),

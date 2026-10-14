@@ -58,6 +58,10 @@ function makeNode(desc) {
     disabled: false,
     listeners: {},
     children: [],
+    appendChild(child) {
+      this.children.push(child)
+      return child
+    },
     addEventListener(ev, fn) {
       ;(this.listeners[ev] = this.listeners[ev] || []).push(fn)
     },
@@ -234,25 +238,77 @@ if (typeof sandbox.showTab !== 'function') {
 }
 
 if (typeof sandbox.showTab === 'function') {
+  const AUX = { lssd: 'LSSD Intranet', forum: 'LSSD Forum', penal: 'Ceza Kanunu', 'penal-backup': 'Ceza Kanunu (Yedek)' }
+  const auxLabels = Object.values(AUX)
   const pageBar = nodes.get('page-bar')
-  const tabMdc = nodes.get('tab-mdc')
-  for (const tab of ['lssd', 'forum', 'penal', 'penal-backup']) {
-    const mark = createdNodes.length
-    sandbox.showTab(tab)
-    if (!pageBar) {
-      failures.push('page bar element was never looked up')
-      break
-    }
-    if (pageBar.classList.contains('hidden')) failures.push(tab + ': the page bar is hidden outside the MDC tab')
-    const pageTabs = createdNodes.slice(mark).filter((n) => /\bpagetab\b/.test(n.className || ''))
-    if (!pageTabs.length) {
-      failures.push(tab + ': the page bar was drawn without any page buttons')
+  const isSelected = (n) => /\bactive\b/.test(n.className || '')
+  const labelOf = (n) => (n.children[0] && n.children[0].textContent) || ''
+  const buttonsSince = (mark) => {
+    const row = createdNodes.slice(mark).filter((n) => n.className === 'pagerow').pop()
+    return row ? row.children.filter((n) => /\bpagetab\b/.test(n.className || '')) : []
+  }
+
+  for (const [tab, label] of Object.entries(AUX)) {
+    const tabNode = nodes.get('tab-' + tab)
+    if (!tabNode || !pageBar) {
+      failures.push(tab + ': tab button or page bar element is missing')
       continue
     }
-    if (pageTabs.some((n) => /\bactive\b/.test(n.className))) failures.push(tab + ': a page button looks selected while another tab is open')
-    tabMdc.classList.remove('active')
-    pageTabs[0].dispatch('click')
-    if (!tabMdc.classList.contains('active')) failures.push(tab + ': clicking a page button did not return to the MDC tab')
+    let mark = createdNodes.length
+    sandbox.showTab(tab)
+    sandbox.showTab(tab)
+    if (pageBar.classList.contains('hidden')) failures.push(tab + ': the page bar is hidden outside the MDC tab')
+    let buttons = buttonsSince(mark)
+    const mine = buttons.filter((b) => labelOf(b) === label)
+    if (mine.length !== 1) {
+      failures.push(tab + ': expected one "' + label + '" button in the page bar, found ' + mine.length)
+      continue
+    }
+    if (!isSelected(mine[0])) failures.push(tab + ': its own page button is not selected while the tab is open')
+    if (buttons.filter(isSelected).length !== 1) failures.push(tab + ': more than one page button is selected')
+
+    const pageButton = buttons.find((b) => !auxLabels.includes(labelOf(b)))
+    if (!pageButton) {
+      failures.push(tab + ': no MDC page button next to the tab button')
+    } else {
+      mark = createdNodes.length
+      nodes.get('tab-mdc').classList.remove('active')
+      pageButton.dispatch('click')
+      if (!nodes.get('tab-mdc').classList.contains('active')) failures.push(tab + ': clicking an MDC page did not return to the MDC tab')
+      const again = buttonsSince(mark).filter((b) => labelOf(b) === label)
+      if (again.length !== 1) {
+        failures.push(tab + ': its page button disappeared after switching to an MDC page')
+      } else {
+        tabNode.classList.remove('active')
+        again[0].dispatch('click')
+        if (!tabNode.classList.contains('active')) failures.push(tab + ': clicking its page button did not open the tab')
+      }
+    }
+
+    mark = createdNodes.length
+    const closeButton = mine[0].children[1]
+    if (!closeButton) {
+      failures.push(tab + ': its page button has no close control')
+      continue
+    }
+    closeButton.dispatch('click')
+    if (tabNode.classList.contains('active')) failures.push(tab + ': the tab stayed selected after its page was closed')
+    if (buttonsSince(mark).some((b) => labelOf(b) === label)) failures.push(tab + ': closed page still listed in the page bar')
+
+    mark = createdNodes.length
+    sandbox.showTab(tab)
+    if (buttonsSince(mark).filter((b) => labelOf(b) === label).length !== 1) failures.push(tab + ': reopening the tab did not list it again')
+    const reopened = buttonsSince(createdNodes.length - 1).filter((b) => labelOf(b) === label)[0]
+    if (reopened && reopened.children[1]) reopened.children[1].dispatch('click')
+  }
+
+  const orderMark = createdNodes.length
+  sandbox.showTab('lssd')
+  sandbox.openPage('https://mdc-tr.gta.world/order-check')
+  const order = buttonsSince(orderMark).map(labelOf)
+  const at = order.indexOf('LSSD Intranet')
+  if (at < 1 || at === order.length - 1) {
+    failures.push('page order: the Intranet button should sit between the older and the newer MDC page, got: ' + order.join(' | '))
   }
   sandbox.showTab('mdc')
 }

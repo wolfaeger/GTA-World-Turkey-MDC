@@ -1,5 +1,11 @@
 # Sürüm Notları
 
+## 1.0.2
+
+### Sayfalar ve gezinme
+- LSSD Intranet, LSSD Forum, Ceza Kanunu ve Ceza Kanunu (Yedek) sekmeleri açıldığında Sayfalar şeridinde kendi sayfa düğmeleriyle görünür. MDC sayfalarıyla aynı şeritten seçilirler ve açılış sırasına göre dizilirler. Bu sayfaların her biri ✖ düğmesiyle kapatılabilir. Kapatılan Intranet, Forum ve Ceza Kanunu sayfaları yeniden açıldığında baştan yüklenir.
+- Ctrl+W, açık olan Intranet, Forum ve Ceza Kanunu sayfalarını da kapatır.
+
 ## 1.0.1
 
 ### Sayfalar ve gezinme

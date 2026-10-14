@@ -229,6 +229,8 @@ Bağlantılarda ayrıca Yeni Sayfada Aç, Tarayıcıda Aç, Bağlantıyı İndir
 Kopyala ve Temiz Bağlantıyı Kopyala bulunur. Bu menü `guest-menu.js` içindedir. MDC
 sekmesi bundan etkilenmez; orada bağlantılara sağ tıklamak bağlantıyı yeni sayfada açar.
 Üstteki adres kutusu, bu sekmelerde gezdikçe geçerli adresi gösterir.
+Bu sekmelerden biri açıldığında Sayfalar şeridinde kendi düğmesiyle görünür; MDC sayfalarıyla
+aynı şeritten seçilir ve ✖ ile kapatılır (Ctrl+W de çalışır). Şeritteki sıra açılış sırasıdır.
 
 Forumda ayrıca oturum açmanız gerekir; bunu sekmede, tarayıcıda yaptığınız gibi
 yapabilirsiniz. Forum giriş bilgileri saklanmaz. Giriş yapana kadar forum sayfası
