@@ -231,6 +231,8 @@ sekmesi bundan etkilenmez; orada bağlantılara sağ tıklamak bağlantıyı yen
 Üstteki adres kutusu, bu sekmelerde gezdikçe geçerli adresi gösterir.
 Bu sekmelerden biri açıldığında Sayfalar şeridinde kendi düğmesiyle görünür; MDC sayfalarıyla
 aynı şeritten seçilir ve ✖ ile kapatılır (Ctrl+W de çalışır). Şeritteki sıra açılış sırasıdır.
+LSSD Intranet ve LSSD Forum düğmeleri açık sayfanın başlığını gösterir (örneğin Olay Raporu ya da
+forum konusunun adı); başlık yalnızca site adından oluşuyorsa sekmenin kendi adı görünür.
 
 Forumda ayrıca oturum açmanız gerekir; bunu sekmede, tarayıcıda yaptığınız gibi
 yapabilirsiniz. Forum giriş bilgileri saklanmaz. Giriş yapana kadar forum sayfası

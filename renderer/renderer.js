@@ -163,7 +163,7 @@ function barItems() {
 function openAux(tab) {
   if (!AUX_TABS[tab] || auxOpen.some((a) => a.tab === tab)) return
   pageSeq += 1
-  auxOpen.push({ tab, seq: pageSeq })
+  auxOpen.push({ tab, seq: pageSeq, title: '' })
 }
 
 function resetAuxView(tab) {
@@ -197,14 +197,29 @@ function closeAux(tab) {
   playSound('close')
 }
 
+function auxLabel(a) {
+  const base = AUX_TABS[a.tab]
+  const first = String(a.title || '').split(/\s+[-|\u2013\u2014]\s+/)[0].trim()
+  if (!first || /^(ls|los santos) county sheriff.s (intranet|department)\b/i.test(first)) return base
+  return first.length > 36 ? first.slice(0, 35).trimEnd() + '\u2026' : first
+}
+
+function setAuxTitle(tab, title) {
+  const a = auxOpen.find((x) => x.tab === tab)
+  const next = String(title || '').trim()
+  if (!a || /^about:/i.test(next) || a.title === next) return
+  a.title = next
+  renderPageBar()
+}
+
 function auxButton(a) {
   const btn = document.createElement('button')
   btn.className = 'pagetab' + (activeTab === a.tab ? ' active' : '')
-  btn.title = AUX_TABS[a.tab]
+  btn.title = a.title || AUX_TABS[a.tab]
 
   const label = document.createElement('span')
   label.className = 'pagelabel'
-  label.textContent = AUX_TABS[a.tab]
+  label.textContent = auxLabel(a)
   btn.appendChild(label)
 
   const x = document.createElement('span')
@@ -2639,6 +2654,7 @@ boot('lssd', () => {
 
   trackNavigation(lssdView, 'lssd')
   on(lssdView, 'page-title-updated', (e) => {
+    setAuxTitle('lssd', e && e.title)
     if (activeTab !== 'lssd') return
     document.title = APP_NAME
     setStatus(e.title || 'LSSD Intranet')
@@ -2668,6 +2684,7 @@ boot('lssd-forum', () => {
 
   trackNavigation(lssdForumView, 'forum')
   on(lssdForumView, 'page-title-updated', (e) => {
+    setAuxTitle('forum', e && e.title)
     if (activeTab !== 'forum') return
     document.title = APP_NAME
     setStatus(e.title || 'LSSD Forum')

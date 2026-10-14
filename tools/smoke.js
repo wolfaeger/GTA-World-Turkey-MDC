@@ -102,6 +102,7 @@ for (let i = 0; i < MENU_ITEM_COUNT; i++) {
 
 const documentListeners = {}
 const createdNodes = []
+const contentNode = makeNode('content')
 
 const document = {
   title: '',
@@ -114,6 +115,7 @@ const document = {
   },
   querySelector(sel) {
     if (sel === '.menu') return menuNodes[0] || null
+    if (sel === '.content') return contentNode
     return null
   },
   querySelectorAll(sel) {
@@ -298,17 +300,51 @@ if (typeof sandbox.showTab === 'function') {
     mark = createdNodes.length
     sandbox.showTab(tab)
     if (buttonsSince(mark).filter((b) => labelOf(b) === label).length !== 1) failures.push(tab + ': reopening the tab did not list it again')
-    const reopened = buttonsSince(createdNodes.length - 1).filter((b) => labelOf(b) === label)[0]
+    const reopened = buttonsSince(mark).filter((b) => labelOf(b) === label)[0]
     if (reopened && reopened.children[1]) reopened.children[1].dispatch('click')
+  }
+
+  const titleCases = [
+    ['lssd', 'lssd', "Olay Raporu - LS County Sheriff's Intranet (v1) - LSSD", 'Olay Raporu'],
+    ['lssd', 'lssd', "LS County Sheriff's Intranet (v1) - LSSD", 'LSSD Intranet'],
+    ['forum', 'lssd-forum', "SR-20353-12/10/2026-Leon Vellucci - İfade Raporları - Los Santos County Sheriff's Department", 'SR-20353-12/10/2026-Leon Vellucci'],
+    ['forum', 'lssd-forum', "Los Santos County Sheriff's Department", 'LSSD Forum'],
+    ['forum', 'lssd-forum', 'Bu çok uzun bir konu başlığıdır ve şeritte kısaltılmalıdır - İfade Raporları - Site', 'Bu çok uzun bir konu başlığıdır ve…']
+  ]
+  for (const [tab, viewId, title, expected] of titleCases) {
+    const viewNode = nodes.get(viewId)
+    sandbox.showTab(tab)
+    const mark = createdNodes.length
+    viewNode.dispatch('page-title-updated', { title })
+    const base = AUX[tab]
+    const shown = buttonsSince(mark).map(labelOf)
+    if (!shown.includes(expected)) {
+      failures.push(tab + ': title "' + title + '" should show as "' + expected + '" in the page bar, got: ' + shown.join(' | '))
+    }
+    if (expected !== base && shown.includes(base)) failures.push(tab + ': the page bar still shows the plain tab name next to the title')
+  }
+  {
+    const viewNode = nodes.get('lssd')
+    sandbox.showTab('mdc')
+    const mark = createdNodes.length
+    viewNode.dispatch('page-title-updated', { title: 'Genel Raporlar - LS County Sheriff\'s Intranet (v1) - LSSD' })
+    if (!buttonsSince(mark).map(labelOf).includes('Genel Raporlar')) failures.push('lssd: the title was not updated while another tab was in front')
+  }
+  sandbox.closeAux('lssd')
+  sandbox.closeAux('forum')
+  {
+    const mark = createdNodes.length
+    sandbox.showTab('forum')
+    if (!buttonsSince(mark).map(labelOf).includes('LSSD Forum')) failures.push('forum: a reopened page kept the title of the page that was closed')
+    sandbox.closeAux('forum')
   }
 
   const orderMark = createdNodes.length
   sandbox.showTab('lssd')
   sandbox.openPage('https://mdc-tr.gta.world/order-check')
   const order = buttonsSince(orderMark).map(labelOf)
-  const at = order.indexOf('LSSD Intranet')
-  if (at < 1 || at === order.length - 1) {
-    failures.push('page order: the Intranet button should sit between the older and the newer MDC page, got: ' + order.join(' | '))
+  if (order.length !== 3 || order.indexOf('LSSD Intranet') !== 1) {
+    failures.push('page order: expected the first MDC page, then Intranet, then the newer MDC page, got: ' + order.join(' | '))
   }
   sandbox.showTab('mdc')
 }

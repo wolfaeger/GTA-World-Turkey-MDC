@@ -1,5 +1,11 @@
 # Sürüm Notları
 
+## 1.0.3
+
+### Sayfalar ve gezinme
+- Sayfalar şeridindeki LSSD Intranet ve LSSD Forum düğmeleri artık açık olan sayfanın başlığını gösterir. Örneğin Intranet'te "Olay Raporu", forumda konunun adı yazar. Başlık sekme arka plandayken de güncellenir.
+- Ana sayfa gibi başlığı yalnızca site adından oluşan sayfalarda sekmenin kendi adı görünür. Uzun başlıklar kısaltılır; düğmenin üzerine gelince başlığın tamamı görünür.
+
 ## 1.0.2
 
 ### Sayfalar ve gezinme
