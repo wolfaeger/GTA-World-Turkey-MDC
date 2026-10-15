@@ -162,7 +162,9 @@ sandbox.removeEventListener = () => {}
 sandbox.Event = function Event(type) { this.type = type }
 sandbox.innerWidth = 1280
 sandbox.innerHeight = 860
+const presenceCalls = []
 sandbox.mdt = {
+  setPresence: (payload) => { presenceCalls.push(payload); return Promise.resolve(true) },
   getInfo: () => Promise.resolve({ version: '1.0.0', electron: '31.0.0', chrome: '126' }),
   clearSession: () => Promise.resolve(),
   openExternal: () => {},
@@ -347,6 +349,30 @@ if (typeof sandbox.showTab === 'function') {
     failures.push('page order: expected the first MDC page, then Intranet, then the newer MDC page, got: ' + order.join(' | '))
   }
   sandbox.showTab('mdc')
+}
+
+if (typeof sandbox.toggle !== 'function' || typeof sandbox.showTab !== 'function') {
+  failures.push('toggle or showTab is not reachable, cannot check the Discord presence')
+} else {
+  const mdcView = nodes.get('mdc')
+  const lastPresence = () => presenceCalls[presenceCalls.length - 1] || {}
+  sandbox.showTab('mdc')
+  sandbox.showPage('page-1')
+  sandbox.toggle('discordPresence')
+  if (!lastPresence().enabled) failures.push('discord: turning the presence on did not send an enabled presence')
+  if (!mdcView) {
+    failures.push('discord: the MDC view node is missing')
+  } else {
+    mdcView.dispatch('ipc-message', { channel: 'mdt:page-info', args: [{ officer: 'Jane Sanchez #12151' }] })
+    if (lastPresence().state) failures.push('discord: the character name is sent although the name option is off (state: "' + lastPresence().state + '")')
+    sandbox.toggle('discordShowName')
+    if (lastPresence().state !== 'Jane Sanchez') failures.push('discord: the character name is missing after turning the name option on (state: "' + lastPresence().state + '")')
+    sandbox.toggle('discordShowName')
+    if (lastPresence().state) failures.push('discord: the character name stayed after turning the name option off again')
+    if (!lastPresence().details) failures.push('discord: the activity line is empty')
+  }
+  sandbox.toggle('discordPresence')
+  if (lastPresence().enabled) failures.push('discord: turning the presence off still sends an enabled presence')
 }
 
 const pkgJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))

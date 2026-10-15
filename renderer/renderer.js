@@ -381,6 +381,7 @@ const view = {
   alertReminder: prefBool('alertReminder', true),
   dragWindows: prefBool('dragWindows', true),
   discordPresence: prefBool('discordPresence', false),
+  discordShowName: prefBool('discordShowName', false),
   minimizeToTray: prefBool('minimizeToTray', false)
 }
 
@@ -526,7 +527,7 @@ function pushPresence() {
   const payload = {
     enabled: !!view.discordPresence,
     details: presenceDetails(),
-    state: officerName || 'Mobil Veri Bilgisayarı'
+    state: view.discordShowName && officerName ? officerName : ''
   }
   const key = JSON.stringify(payload)
   if (key === lastPresenceKey) return
@@ -1523,8 +1524,10 @@ function showOptions() {
     '</fieldset>' +
     '<fieldset class="opt-group"><legend>Pencere</legend>' +
     check('dragWindows', 'Açılır pencereleri başlık çubuğundan sürükleyebil') +
-    check('discordPresence', 'Discord’da ne yaptığımı göster') +
     '<p class="opt-note">İstemcinin Geçmiş, Ayarlar, Klavye Kısayolları, İsim Sorgusu ve Plaka Sorgusu pencerelerine ve MDC’nin kendi açılır pencerelerine uygulanır.</p>' +
+    check('discordPresence', 'Discord’da ne yaptığımı göster') +
+    check('discordShowName', 'Discord’da karakter adımı da göster', !view.discordPresence) +
+    '<p class="opt-note">İlk seçenek açıkken Discord’da “Mobile Data Computer” altında yaptığınız işlem (örneğin “Sorgulama yapıyor”) görünür. Karakter adınız Discord hesabınızla eşleştirilebileceği için varsayılan olarak gizlidir; görünmesini istiyorsanız ikinci seçeneği de açın.</p>' +
     check('minimizeToTray', 'Bildirim alanına küçült (sistem tepsisi)') +
     check('updateCheck', 'İstemci başladığında güncellemeleri denetle') +
     '<p class="opt-note">Güncelleme denetimi yalnızca proje sayfasındaki herkese açık sürüm listesini okur. Güncelle düğmesine basılana kadar hiçbir şey indirilmez veya kurulmaz. Varsayılan olarak kapalıdır; Yardım &gt; Hakkında bölümünden elle denetlenebilir.</p>' +
@@ -1546,7 +1549,7 @@ function showOptions() {
     input.addEventListener('change', () => {
       const key = input.getAttribute('data-opt')
       toggle(key)
-      if (key === 'historyLog' || key === 'navBar') showOptions()
+      if (key === 'historyLog' || key === 'navBar' || key === 'discordPresence') showOptions()
     })
   })
 }

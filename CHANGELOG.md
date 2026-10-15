@@ -1,5 +1,14 @@
 # Sürüm Notları
 
+## 1.0.4
+
+### Discord
+- Karakter adı artık ayrı bir seçenekle açılıp kapanır ve varsayılan olarak gizlidir. "Discord'da ne yaptığımı göster" açıkken Discord'da "Mobile Data Computer" altında yalnızca yapılan işlem (örneğin "Sorgulama yapıyor") görünür. Karakter adının da görünmesi için Ayarlar'daki "Discord'da karakter adımı da göster" seçeneği işaretlenir. Ad gizliyken üçüncü satır hiç gösterilmez.
+- Discord durumunu daha önce açmış olanlarda karakter adı bu sürümden sonra gizlenir; görünmesini isteyenlerin yeni seçeneği açması gerekir.
+
+### Ayarlar
+- Pencere grubunda "Açılır pencereleri başlık çubuğundan sürükleyebil" seçeneğinin açıklaması, araya giren Discord seçeneğinin altında kalıyordu; yerine taşındı. Discord seçeneklerinin kendi açıklaması eklendi.
+
 ## 1.0.3
 
 ### Sayfalar ve gezinme

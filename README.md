@@ -469,8 +469,11 @@ Discord'da görünen ilk satır (örneğin "Mobile Data Computer") koddan değil
 Developer Portal'daki uygulamanın adından gelir. Yeni bir uygulama oluşturup adını
 "Mobile Data Computer" yapın, **Application ID** değerini `main.js` içindeki
 `DISCORD_APP_ID` sabitine yazın ve uygulamanın Rich Presence > Art Assets bölümüne
-simgeyi `app_icon` adıyla yükleyin. İkinci satır yapılan işlemi, üçüncü satır karakter
-adını gösterir; ikisi de `renderer/renderer.js` içindeki `pushPresence` işlevinden gelir.
+simgeyi `app_icon` adıyla yükleyin. İkinci satır yapılan işlemi gösterir. Karakter adı
+Discord hesabıyla eşleştirilebildiği için varsayılan olarak gizlidir; Ayarlar'daki
+"Discord'da karakter adımı da göster" seçeneği açılırsa üçüncü satırda görünür. Ad
+gizliyken üçüncü satır hiç gönderilmez. İkisi de `renderer/renderer.js` içindeki
+`pushPresence` işlevinden gelir.
 
 **Amir özellikleri.** Amirlerin ve üst rütbeli memurların erişebildiği bazı
 görünümler yanlış çalışabilir; bu sayfaların kaynak koduna erişim yoktu. İstemci,

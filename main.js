@@ -517,20 +517,22 @@ function rpcPushActivity() {
     })
     return
   }
+  const activity = {
+    details: String(rpcWanted.details || 'MDC kullanıyor').slice(0, 128),
+    timestamps: { start: rpcWanted.since || Date.now() },
+    assets: {
+      large_image: DISCORD_LARGE_IMAGE,
+      large_text: 'Mobile Data Computer - GTA World TR'
+    },
+    instance: false
+  }
+  const state = String(rpcWanted.state || '').trim()
+  if (state.length >= 2) activity.state = state.slice(0, 128)
   rpcWrite(1, {
     cmd: 'SET_ACTIVITY',
     args: {
       pid: process.pid,
-      activity: {
-        details: String(rpcWanted.details || 'MDC kullanıyor').slice(0, 128),
-        state: String(rpcWanted.state || 'Mobil Veri Bilgisayarı').slice(0, 128),
-        timestamps: { start: rpcWanted.since || Date.now() },
-        assets: {
-          large_image: DISCORD_LARGE_IMAGE,
-          large_text: 'Mobile Data Computer - GTA World TR'
-        },
-        instance: false
-      }
+      activity
     },
     nonce: String(Date.now())
   })
