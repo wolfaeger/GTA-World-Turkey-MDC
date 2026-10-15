@@ -1,5 +1,13 @@
 # Sürüm Notları
 
+## 1.0.5
+
+### Discord
+- LSSD Intranet ve LSSD Forum sekmelerinde Discord durumu artık ne yaptığınızı gösterir.
+- LSSD Intranet: Rapor formunda sayfanın adıyla "Olay Raporu dolduruyor", "İfade Raporu dolduruyor" ya da "Güç Kullanım Raporu dolduruyor" yazar. Diğer sayfalarda "LSSD Intranet: Personel Listesi" gibi sayfa adı, giriş sayfasında "LSSD Intranet'e giriş yapıyor" görünür.
+- LSSD Forum: Bir bölüme bakarken "Olay Raporları bölümüne bakıyor", Yeni Başlık açarken "Olay Raporu giriyor" yazar. Yeni başlığın hangi bölümde açıldığı, o bölümün daha önce açılmış olmasına bağlıdır; açılmamışsa "Yeni başlık açıyor" görünür. Yanıt yazarken "Konuya yanıt yazıyor", mesaj düzenlerken "Mesaj düzenliyor" yazar. Olay, ifade, güç kullanım, gözaltı ve ek mesai raporu konularını okurken rapor türü ("Olay Raporu okuyor") gösterilir.
+- Forum konu başlıkları ve içlerindeki isimler Discord'a gönderilmez.
+
 ## 1.0.4
 
 ### Discord

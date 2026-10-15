@@ -371,6 +371,43 @@ if (typeof sandbox.toggle !== 'function' || typeof sandbox.showTab !== 'function
     if (lastPresence().state) failures.push('discord: the character name stayed after turning the name option off again')
     if (!lastPresence().details) failures.push('discord: the activity line is empty')
   }
+  const lssdNode = nodes.get('lssd')
+  const forumNode = nodes.get('lssd-forum')
+  const SITE = "Los Santos County Sheriff's Department"
+  const INTRANET = "LS County Sheriff's Intranet (v1) - LSSD"
+  const detailsFor = (tab, node, url, title) => {
+    sandbox.showTab(tab)
+    node.getURL = () => url
+    node.dispatch('did-navigate', {})
+    node.dispatch('page-title-updated', { title })
+    return lastPresence().details
+  }
+  const expectDetails = (label, got, want) => {
+    if (got !== want) failures.push('discord: ' + label + ' should show "' + want + '", got "' + got + '"')
+  }
+  if (!lssdNode || !forumNode) {
+    failures.push('discord: the Intranet or Forum view node is missing')
+  } else {
+    const I = 'https://lssdportal.online'
+    const F = 'https://lssd-tr.gta.world'
+    expectDetails('Intranet incident form', detailsFor('lssd', lssdNode, I + '/reports/incident/new', 'Olay Raporu - ' + INTRANET), 'Olay Raporu dolduruyor')
+    expectDetails('Intranet statement form', detailsFor('lssd', lssdNode, I + '/reports/statement/new', 'İfade Raporu - ' + INTRANET), 'İfade Raporu dolduruyor')
+    expectDetails('Intranet use of force form', detailsFor('lssd', lssdNode, I + '/reports/use-of-force/new', 'Güç Kullanım Raporu - ' + INTRANET), 'Güç Kullanım Raporu dolduruyor')
+    expectDetails('Intranet other page', detailsFor('lssd', lssdNode, I + '/personnel', 'Personel Listesi - ' + INTRANET), 'LSSD Intranet: Personel Listesi')
+    expectDetails('Intranet login', detailsFor('lssd', lssdNode, I + '/login', 'LSSD Portalı - ' + SITE), 'LSSD Intranet’e giriş yapıyor')
+    expectDetails('Intranet home', detailsFor('lssd', lssdNode, I + '/', INTRANET), 'LSSD Intranet kullanıyor')
+
+    expectDetails('Forum section', detailsFor('forum', forumNode, F + '/viewforum.php?f=12', 'Olay Raporları - ' + SITE), 'Olay Raporları bölümüne bakıyor')
+    expectDetails('Forum new topic in a report section', detailsFor('forum', forumNode, F + '/posting.php?mode=post&f=12', SITE), 'Olay Raporu giriyor')
+    detailsFor('forum', forumNode, F + '/viewforum.php?f=15', 'Subject Information System - ' + SITE)
+    expectDetails('Forum new topic in another section', detailsFor('forum', forumNode, F + '/posting.php?mode=post&f=15', SITE), 'Subject Information System bölümüne başlık açıyor')
+    expectDetails('Forum new topic in an unknown section', detailsFor('forum', forumNode, F + '/posting.php?mode=post&f=99', SITE), 'Yeni başlık açıyor')
+    expectDetails('Forum reply', detailsFor('forum', forumNode, F + '/posting.php?mode=reply&f=12&t=5', SITE), 'Konuya yanıt yazıyor')
+    expectDetails('Forum incident report topic', detailsFor('forum', forumNode, F + '/viewtopic.php?t=5', 'IR-56845-15/10/2026 — Inventory - Olay Raporları - ' + SITE), 'Olay Raporu okuyor')
+    expectDetails('Forum other topic', detailsFor('forum', forumNode, F + '/viewtopic.php?t=6', 'Genel Duyuru - ' + SITE), 'Forumda konu okuyor')
+    expectDetails('Forum index', detailsFor('forum', forumNode, F + '/index.php', SITE), 'LSSD Forumunu kullanıyor')
+    if (/Inventory|Duyuru/.test(String(lastPresence().details))) failures.push('discord: a topic title leaked into the presence')
+  }
   sandbox.toggle('discordPresence')
   if (lastPresence().enabled) failures.push('discord: turning the presence off still sends an enabled presence')
 }

@@ -469,7 +469,10 @@ Discord'da görünen ilk satır (örneğin "Mobile Data Computer") koddan değil
 Developer Portal'daki uygulamanın adından gelir. Yeni bir uygulama oluşturup adını
 "Mobile Data Computer" yapın, **Application ID** değerini `main.js` içindeki
 `DISCORD_APP_ID` sabitine yazın ve uygulamanın Rich Presence > Art Assets bölümüne
-simgeyi `app_icon` adıyla yükleyin. İkinci satır yapılan işlemi gösterir. Karakter adı
+simgeyi `app_icon` adıyla yükleyin. İkinci satır yapılan işlemi gösterir: MDC'de sorgulama,
+harita, arama emri gibi işlemler; LSSD Intranet'te sayfanın adıyla ("Olay Raporu dolduruyor");
+LSSD Forum'da bölüme ve adrese göre ("Olay Raporları bölümüne bakıyor", "Olay Raporu giriyor").
+Forum konu başlıkları ve içindeki isimler Discord'a gönderilmez. Karakter adı
 Discord hesabıyla eşleştirilebildiği için varsayılan olarak gizlidir; Ayarlar'daki
 "Discord'da karakter adımı da göster" seçeneği açılırsa üçüncü satırda görünür. Ad
 gizliyken üçüncü satır hiç gönderilmez. İkisi de `renderer/renderer.js` içindeki

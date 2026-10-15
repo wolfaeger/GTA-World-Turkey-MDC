@@ -197,11 +197,16 @@ function closeAux(tab) {
   playSound('close')
 }
 
+function auxTitleHead(raw) {
+  const first = String(raw || '').split(/\s+[-|\u2013\u2014]\s+/)[0].trim()
+  if (!first || /^(ls|los santos) county sheriff.s (intranet|department)\b/i.test(first)) return ''
+  return first
+}
+
 function auxLabel(a) {
-  const base = AUX_TABS[a.tab]
-  const first = String(a.title || '').split(/\s+[-|\u2013\u2014]\s+/)[0].trim()
-  if (!first || /^(ls|los santos) county sheriff.s (intranet|department)\b/i.test(first)) return base
-  return first.length > 36 ? first.slice(0, 35).trimEnd() + '\u2026' : first
+  const head = auxTitleHead(a.title)
+  if (!head) return AUX_TABS[a.tab]
+  return head.length > 36 ? head.slice(0, 35).trimEnd() + '\u2026' : head
 }
 
 function setAuxTitle(tab, title) {
@@ -209,7 +214,9 @@ function setAuxTitle(tab, title) {
   const next = String(title || '').trim()
   if (!a || /^about:/i.test(next) || a.title === next) return
   a.title = next
+  if (tab === 'forum') noteForumSection()
   renderPageBar()
+  auxPresenceSync(tab)
 }
 
 function auxButton(a) {
@@ -513,10 +520,101 @@ const PRESENCE_BY_KIND = {
   'APB listesi': 'APB’lere bakıyor'
 }
 
+const forumSections = {}
+
+const FORUM_TOPIC_KINDS = {
+  IR: 'Olay Raporu',
+  SR: 'İfade Raporu',
+  FR: 'Güç Kullanım Raporu',
+  CR: 'Gözaltı Raporu',
+  OVR: 'Ek Mesai Raporu'
+}
+
+function urlParts(raw) {
+  const m = String(raw || '').match(/^https?:\/\/[^/?#]+([^?#]*)(?:\?([^#]*))?/i)
+  const query = {}
+  if (m && m[2]) {
+    m[2].split('&').forEach((pair) => {
+      const i = pair.indexOf('=')
+      const key = i < 0 ? pair : pair.slice(0, i)
+      const value = i < 0 ? '' : pair.slice(i + 1)
+      try {
+        query[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, ' '))
+      } catch (_) {
+        query[key] = value
+      }
+    })
+  }
+  return { path: m ? m[1] : '', query }
+}
+
+function auxTitleOf(tab) {
+  const a = auxOpen.find((x) => x.tab === tab)
+  return a ? a.title : ''
+}
+
+function auxViewUrl(tab) {
+  const v = tab === 'lssd' ? lssdView : tab === 'forum' ? lssdForumView : null
+  try {
+    return v ? String(v.getURL() || '') : ''
+  } catch (_) {
+    return ''
+  }
+}
+
+function noteForumSection() {
+  const { path, query } = urlParts(auxViewUrl('forum'))
+  if (!/viewforum\.php$/i.test(path) || !query.f) return
+  const head = auxTitleHead(auxTitleOf('forum'))
+  if (head) forumSections[query.f] = head
+}
+
+function intranetDetails() {
+  const { path } = urlParts(auxViewUrl('lssd'))
+  const head = auxTitleHead(auxTitleOf('lssd'))
+  if (/^\/login\/?$/i.test(path)) return 'LSSD Intranet’e giriş yapıyor'
+  const creating = /^\/reports\/.+\/(new|create)\/?$/i.test(path)
+  if (creating || (head && /(raporu|formu)$/i.test(head))) {
+    return head ? head + ' dolduruyor' : 'Rapor dolduruyor'
+  }
+  return head ? 'LSSD Intranet: ' + head : 'LSSD Intranet kullanıyor'
+}
+
+function forumDetails() {
+  const { path, query } = urlParts(auxViewUrl('forum'))
+  const file = (path.split('/').pop() || '').toLowerCase()
+  const head = auxTitleHead(auxTitleOf('forum'))
+  if (file === 'posting.php') {
+    if (query.mode === 'post') {
+      const section = query.f ? forumSections[query.f] : ''
+      if (!section) return 'Yeni başlık açıyor'
+      return /Raporları$/i.test(section)
+        ? section.replace(/Raporları$/i, 'Raporu') + ' giriyor'
+        : section + ' bölümüne başlık açıyor'
+    }
+    if (query.mode === 'reply' || query.mode === 'quote') return 'Konuya yanıt yazıyor'
+    if (query.mode === 'edit') return 'Mesaj düzenliyor'
+    return 'LSSD Forumunu kullanıyor'
+  }
+  if (file === 'viewforum.php') {
+    const section = (query.f && forumSections[query.f]) || head
+    return section ? section + ' bölümüne bakıyor' : 'LSSD Forumunu kullanıyor'
+  }
+  if (file === 'viewtopic.php') {
+    const m = head.match(/^(?:Re:\s*)?(IR|SR|FR|CR|OVR)-\d/i)
+    return m ? FORUM_TOPIC_KINDS[m[1].toUpperCase()] + ' okuyor' : 'Forumda konu okuyor'
+  }
+  return 'LSSD Forumunu kullanıyor'
+}
+
+function auxPresenceSync(tab) {
+  if (activeTab === tab && (tab === 'lssd' || tab === 'forum')) pushPresence()
+}
+
 function presenceDetails() {
   if (activeTab === 'penal' || activeTab === 'penal-backup') return 'Ceza kanununa bakıyor'
-  if (activeTab === 'lssd') return 'LSSD Intranet kullanıyor'
-  if (activeTab === 'forum') return 'LSSD Forumunu kullanıyor'
+  if (activeTab === 'lssd') return intranetDetails()
+  if (activeTab === 'forum') return forumDetails()
   const page = findPage(activePageId)
   const kind = page ? histKind(page.url) : ''
   return PRESENCE_BY_KIND[kind] || 'MDC kullanıyor'
@@ -2501,10 +2599,14 @@ function trackNavigation(view, tab) {
   const refresh = () => {
     syncAddress(tab)
     updateNav()
+    auxPresenceSync(tab)
   }
   on(view, 'did-navigate', refresh)
   on(view, 'did-navigate-in-page', refresh)
-  on(view, 'did-stop-loading', () => syncAddress(tab))
+  on(view, 'did-stop-loading', () => {
+    syncAddress(tab)
+    auxPresenceSync(tab)
+  })
 }
 
 boot('open-page-ipc', () => {
